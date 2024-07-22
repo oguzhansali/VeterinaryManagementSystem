@@ -3,7 +3,7 @@
 
 - Müşteriye ait hayvanlar ve hayvanlara ait aşı kayıtları tutulması sağlandı.
 - Klinikte çalışan doktorun ulaşılabilir tarihlerine göre rezervasyon işlemleri yapıldı.
-- Projenin karmaşıklığını,  müşetir  kayıt ve yönetimi daha iyi yapabilmek için Katmanlı Mimari kullanıldı.
+- Projenin karmaşıklığını,  müşteri  kayıt ve yönetimi daha iyi yapabilmek için Katmanlı Mimari kullanıldı.
 - Uygulama kullanılırken verilerin kayıt edilmesi için PostgreSQL kullanıldı.
 - Bağımsızlıkları kontrol edebilmek için Meaven kullanıldı.
 -Spring Framework kullanıldı.
