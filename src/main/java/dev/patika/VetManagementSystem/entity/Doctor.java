@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "doctors")
 /*@Getter
@@ -27,6 +29,9 @@ public class Doctor {
     private String address;
     @Column(name = "doctor_city")
     private String city;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<AvailableDate> availableDates;
 
     public int getId() {
         return id;
@@ -74,5 +79,13 @@ public class Doctor {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<AvailableDate> getAvailableDates() {
+        return availableDates;
+    }
+
+    public void setAvailableDates(List<AvailableDate> availableDates) {
+        this.availableDates = availableDates;
     }
 }

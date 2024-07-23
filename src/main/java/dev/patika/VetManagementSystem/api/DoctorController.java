@@ -1,5 +1,6 @@
 package dev.patika.VetManagementSystem.api;
 
+import dev.patika.VetManagementSystem.business.abtracts.IAvailableDateService;
 import dev.patika.VetManagementSystem.business.abtracts.IDoctorService;
 import dev.patika.VetManagementSystem.core.config.modelMapper.IModelMapperService;
 import dev.patika.VetManagementSystem.core.result.Result;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/doctors")
 public class DoctorController {
     private  final IDoctorService doctorService;
+    private final IAvailableDateService availableDateService;
 
     private final IModelMapperService modelMapper;
 
-    public DoctorController(IDoctorService doctorService, IModelMapperService modelMapper) {
+    public DoctorController(IDoctorService doctorService, IModelMapperService modelMapper,IAvailableDateService availableDateService) {
         this.doctorService = doctorService;
         this.modelMapper = modelMapper;
+        this.availableDateService= availableDateService;
     }
 
     @PostMapping()
