@@ -21,7 +21,7 @@ public class AvailableDate {
 
     @Column(name = "availableDate_date")
     private LocalDate availableDate;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "availableDate_doctor_id",referencedColumnName = "doctor_id")
     private Doctor doctor;
 

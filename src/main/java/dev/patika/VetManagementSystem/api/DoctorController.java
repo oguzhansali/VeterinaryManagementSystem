@@ -52,7 +52,7 @@ public class DoctorController {
     ) {
         Page<Doctor> doctorPage = this.doctorService.cursor(page, pageSize);
         Page<DoctorResponse> doctorResponsePage = doctorPage
-                .map(category -> this.modelMapper.forResponse().map(category, DoctorResponse.class));
+                .map(doctor -> this.modelMapper.forResponse().map(doctor, DoctorResponse.class));
 
         return ResultHelper.cursor(doctorResponsePage);
     }

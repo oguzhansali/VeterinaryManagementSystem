@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "animals")
@@ -32,6 +33,10 @@ public class Animal {
     @ManyToOne
     @JoinColumn(name = "animal_customer_id",referencedColumnName = "customer_id")
     private Customer customer;
+
+    @OneToMany(mappedBy = "animal")
+    private List<Vaccine> vaccines;
+
 
     public int getId() {
         return id;
@@ -97,4 +102,11 @@ public class Animal {
         this.customer = customer;
     }
 
+    public List<Vaccine> getVaccines() {
+        return vaccines;
+    }
+
+    public void setVaccines(List<Vaccine> vaccines) {
+        this.vaccines = vaccines;
+    }
 }
