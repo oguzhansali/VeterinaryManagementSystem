@@ -1,6 +1,7 @@
 package dev.patika.VetManagementSystem.business.concretes;
 
 import dev.patika.VetManagementSystem.business.abtracts.IDoctorService;
+import dev.patika.VetManagementSystem.core.exception.EmailAlreadyExistsException;
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
 import dev.patika.VetManagementSystem.core.utilies.Msg;
 import dev.patika.VetManagementSystem.dao.AvailableDateRepo;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DoctorManager implements IDoctorService {
@@ -27,6 +29,10 @@ public class DoctorManager implements IDoctorService {
 
     @Override
     public Doctor save(Doctor doctor) {
+        Optional<Doctor> existingDoctorByMail = doctorRepo.findByMail(doctor.getMail());
+        if (existingDoctorByMail.isPresent()) {
+            throw new EmailAlreadyExistsException(Msg.ALREADY_CREATEED);
+        }
         return doctorRepo.save(doctor);
     }
 

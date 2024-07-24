@@ -11,6 +11,7 @@ public class VaccineResponse {
     private int id;
     private String name;
     private String code;
+    private int animalId;
 
     public String getName() {
         return name;
@@ -34,5 +35,13 @@ public class VaccineResponse {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getAnimalId() {
+        return animalId;
+    }
+
+    public void setAnimalId(int animalId) {
+        this.animalId = animalId;
     }
 }

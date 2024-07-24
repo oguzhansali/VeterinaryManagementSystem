@@ -1,5 +1,6 @@
 package dev.patika.VetManagementSystem.core.config;
 
+import dev.patika.VetManagementSystem.core.exception.EmailAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -32,5 +33,9 @@ public class GlobalExceptionHandle {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(ResultHelper.validateEroor(validationErrorList), HttpStatus.BAD_REQUEST);
 
+    }
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Result> handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
+        return new ResponseEntity<>(ResultHelper.notFoundError(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

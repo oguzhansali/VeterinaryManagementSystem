@@ -3,6 +3,7 @@ package dev.patika.VetManagementSystem.business.concretes;
 import dev.patika.VetManagementSystem.business.abtracts.IVaccineService;
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
 import dev.patika.VetManagementSystem.core.utilies.Msg;
+import dev.patika.VetManagementSystem.dao.AnimalRepo;
 import dev.patika.VetManagementSystem.dao.VaccineRepo;
 import dev.patika.VetManagementSystem.entity.Vaccine;
 import org.springframework.data.domain.Page;
@@ -13,13 +14,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class VaccineManager implements IVaccineService {
     private final VaccineRepo vaccineRepo;
+    private final AnimalRepo animalRepo;
 
-    public VaccineManager(VaccineRepo vaccineRepo) {
+    public VaccineManager(VaccineRepo vaccineRepo,AnimalRepo animalRepo) {
         this.vaccineRepo = vaccineRepo;
+        this.animalRepo=animalRepo;
     }
 
     @Override
     public Vaccine save(Vaccine vaccine) {
+        // Animal nesnesinini kontrol eder
+        if (vaccine.getAnimal() == null || !animalRepo.existsById(vaccine.getAnimal().getId())) {
+            throw new NotFoundException(Msg.NOT_FOUND);
+        }
+
         return vaccineRepo.save(vaccine);
     }
 

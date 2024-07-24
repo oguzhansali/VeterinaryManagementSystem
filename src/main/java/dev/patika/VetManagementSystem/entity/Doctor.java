@@ -23,7 +23,7 @@ public class Doctor {
     @Column(name = "doctor_phone")
     private String phone;
     @Email
-    @Column(name = "doctor_mail")
+    @Column(name = "doctor_mail",unique = true)
     private String mail;
     @Column(name = "doctor_address")
     private String address;
