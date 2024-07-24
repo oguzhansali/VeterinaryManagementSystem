@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class AvailableDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "availableDate_id",columnDefinition = "serial")
+    @Column(name = "availableDate_id")
     private int id;
 
     @Column(name = "availableDate_date")

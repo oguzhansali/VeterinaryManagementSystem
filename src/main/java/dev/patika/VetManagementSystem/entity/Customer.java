@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Table(name = "customers")
 @ToString
@@ -29,6 +31,8 @@ public class Customer {
     private String address;
     @Column(name = "customer_city")
     private String city;
+    @OneToMany(mappedBy = "customer")
+    private List<Animal> animals;
 
     public int getId() {
         return id;
@@ -76,5 +80,13 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(List<Animal> animals) {
+        this.animals = animals;
     }
 }

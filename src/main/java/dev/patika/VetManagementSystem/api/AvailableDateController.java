@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/availableDate")
+@RequestMapping("/v1/availableDate")
 public class AvailableDateController {
     private  final IDoctorService doctorService;
 
@@ -39,20 +39,6 @@ public class AvailableDateController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest){
-        /*List<AvailableDate> saveAvailableDates = new ArrayList<>();
-
-        for (AvailableDateSaveRequest request : availableDateSaveRequest){
-            AvailableDate availableDate = this.modelMapper.forRequest().map(request,AvailableDate.class);
-
-            Doctor doctor = this.doctorService.get(request.getDoctorId());
-            availableDate.setDoctor(doctor);
-
-            this.availableDateService.save(availableDate);
-            saveAvailableDates.add(availableDate);
-        }
-        List<AvailableDateResponse> responses = saveAvailableDates.stream()
-                .map(availableDate -> this.modelMapper.forResponse().map(availableDate,AvailableDateResponse.class))
-                .collect(Collectors.toList());*/
         AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(availableDateSaveRequest,AvailableDate.class);
 
         Doctor doctor= this.doctorService.get(availableDateSaveRequest.getDoctorId());

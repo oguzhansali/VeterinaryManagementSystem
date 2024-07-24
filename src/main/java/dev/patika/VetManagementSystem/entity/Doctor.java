@@ -9,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "doctors")
-/*@Getter
-@Setter*/
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
