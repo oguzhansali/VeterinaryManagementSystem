@@ -1,39 +1,28 @@
-package dev.patika.VetManagementSystem.entity;
+package dev.patika.VetManagementSystem.dto.request.customer;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.List;
-
-@Entity
-@Table(name = "doctors")
-/*@Getter
-@Setter*/
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
-public class Doctor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "doctor_id")
-    private  int id;
-    @NotNull
-    @Column(name = "doctor_name")
+@NoArgsConstructor
+public class CustomerUpdateRequest {
+    @Positive(message = "ID değeri pozitif bir sayı olmalıdır")
+    private int id;
+    @NotNull(message = "Müşteri Adı boş olamaz")
     private String name;
-    @Column(name = "doctor_phone")
-    private String phone;
-    @Email
-    @Column(name = "doctor_mail")
-    private String mail;
-    @Column(name = "doctor_address")
-    private String address;
-    @Column(name = "doctor_city")
-    private String city;
 
-    @OneToMany(mappedBy = "doctor")
-    private List<AvailableDate> availableDates;
+    @NotNull(message = "Müşteri iletişim bilgisi boş olamaz")
+    private String phone;
+    @NotNull(message = "Müşteri e-posta adresi boş olamaz")
+    private String mail;
+    @NotNull(message = "Müşteri adres bilgisi boş olamaz")
+    private String address;
+    @NotNull(message = "Doktor şehir bilgisi boş olamaz")
+    private String city;
 
     public int getId() {
         return id;
@@ -81,13 +70,5 @@ public class Doctor {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public List<AvailableDate> getAvailableDates() {
-        return availableDates;
-    }
-
-    public void setAvailableDates(List<AvailableDate> availableDates) {
-        this.availableDates = availableDates;
     }
 }

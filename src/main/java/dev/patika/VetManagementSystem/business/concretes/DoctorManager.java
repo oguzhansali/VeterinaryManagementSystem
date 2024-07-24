@@ -49,8 +49,6 @@ public class DoctorManager implements IDoctorService {
 
         availableDateRepo.deleteByDoctorId(id);
         doctorRepo.delete(doctor);
-       /* Doctor doctor = this.get(id);
-        this.doctorRepo.delete(doctor);*/
         return true;
     }
 

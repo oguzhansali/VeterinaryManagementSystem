@@ -3,37 +3,32 @@ package dev.patika.VetManagementSystem.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
-@Table(name = "doctors")
-/*@Getter
-@Setter*/
+@Table(name = "customers")
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
-public class Doctor {
+@NoArgsConstructor
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "doctor_id")
+    @Column(name = "customer_id")
     private  int id;
     @NotNull
-    @Column(name = "doctor_name")
+    @Column(name = "customer_name")
     private String name;
-    @Column(name = "doctor_phone")
+    @Column(name = "customer_phone")
     private String phone;
     @Email
-    @Column(name = "doctor_mail")
+    @Column(name = "customer_mail")
     private String mail;
-    @Column(name = "doctor_address")
+    @Column(name = "customer_address")
     private String address;
-    @Column(name = "doctor_city")
+    @Column(name = "customer_city")
     private String city;
-
-    @OneToMany(mappedBy = "doctor")
-    private List<AvailableDate> availableDates;
 
     public int getId() {
         return id;
@@ -81,13 +76,5 @@ public class Doctor {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public List<AvailableDate> getAvailableDates() {
-        return availableDates;
-    }
-
-    public void setAvailableDates(List<AvailableDate> availableDates) {
-        this.availableDates = availableDates;
     }
 }
