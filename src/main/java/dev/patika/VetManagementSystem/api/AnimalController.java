@@ -12,6 +12,7 @@ import dev.patika.VetManagementSystem.dto.response.CursorResponse;
 import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.dto.response.availableDate.AvailableDateResponse;
 import dev.patika.VetManagementSystem.dto.response.customer.CustomerResponse;
+import dev.patika.VetManagementSystem.dto.response.vaccine.VaccineResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.AvailableDate;
 import dev.patika.VetManagementSystem.entity.Customer;
@@ -80,6 +81,13 @@ public class AnimalController {
     public Result delete(@PathVariable("id")int id){
         this.animalService.delete(id);
         return ResultHelper.ok();
+    }
+
+    @GetMapping("/{id}/vaccine")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<VaccineResponse> getVaccine(@PathVariable("id")int id){
+        Animal animal = this.animalService.get(id);
+        return ResultHelper.success(this.modelMapper.forResponse().map(animal.getVaccines(),VaccineResponse.class));
     }
 
 
