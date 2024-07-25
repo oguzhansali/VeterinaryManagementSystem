@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @ToString
 @NoArgsConstructor
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class AvailableDateUpdateRequest {
     private int id;
 
-    private LocalDate availableDate;
+    private LocalDateTime availableDate;
     private int doctorId;
 
     public int getId() {
@@ -25,11 +26,11 @@ public class AvailableDateUpdateRequest {
         this.id = id;
     }
 
-    public LocalDate getAvailableDate() {
+    public LocalDateTime getAvailableDate() {
         return availableDate;
     }
 
-    public void setAvailableDate(LocalDate availableDate) {
+    public void setAvailableDate(LocalDateTime availableDate) {
         this.availableDate = availableDate;
     }
 

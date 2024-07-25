@@ -1,26 +1,25 @@
 package dev.patika.VetManagementSystem.dto.request.availableDate;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class AvailableDateSaveRequest {
 
-    private LocalDate availableDate;
+    private LocalDateTime availableDate;
     private int doctorId;
 
-    public LocalDate getAvailableDate() {
+    public LocalDateTime getAvailableDate() {
         return availableDate;
     }
 
-    public void setAvailableDate(LocalDate availableDate) {
+    public void setAvailableDate(LocalDateTime availableDate) {
         this.availableDate = availableDate;
     }
 

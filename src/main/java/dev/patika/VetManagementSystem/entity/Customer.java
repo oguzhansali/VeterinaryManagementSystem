@@ -34,6 +34,9 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Animal> animals;
 
+    @OneToMany(mappedBy = "customer")
+    private List<Appointment> appointments;
+
     public int getId() {
         return id;
     }
@@ -88,5 +91,13 @@ public class Customer {
 
     public void setAnimals(List<Animal> animals) {
         this.animals = animals;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }

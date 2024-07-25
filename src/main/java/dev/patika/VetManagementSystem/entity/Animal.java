@@ -37,6 +37,9 @@ public class Animal {
     @OneToMany(mappedBy = "animal")
     private List<Vaccine> vaccines;
 
+    @OneToMany(mappedBy = "animal")
+    private List<Appointment> appointments;
+
 
     public int getId() {
         return id;
@@ -108,5 +111,13 @@ public class Animal {
 
     public void setVaccines(List<Vaccine> vaccines) {
         this.vaccines = vaccines;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }

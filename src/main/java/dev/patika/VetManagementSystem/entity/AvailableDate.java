@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "availableDates")
@@ -20,24 +21,24 @@ public class AvailableDate {
     private int id;
 
     @Column(name = "availableDate_date")
-    private LocalDate availableDate;
+    private LocalDateTime availableDate;
     @ManyToOne()
-    @JoinColumn(name = "availableDate_doctor_id",referencedColumnName = "doctor_id")
+    @JoinColumn(name = "availableDate_doctor_id", referencedColumnName = "doctor_id")
     private Doctor doctor;
 
     public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public LocalDate getAvailableDate() {
+    public LocalDateTime getAvailableDate() {
         return availableDate;
     }
 
-    public void setAvailableDate(LocalDate availableDate) {
+    public void setAvailableDate(LocalDateTime availableDate) {
         this.availableDate = availableDate;
     }
 
