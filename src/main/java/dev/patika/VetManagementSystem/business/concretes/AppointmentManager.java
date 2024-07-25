@@ -19,6 +19,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,5 +88,14 @@ public class AppointmentManager implements IAppointmentService {
         Appointment appointment = this.get(id);
         this.appointmetRepo.delete(appointment);
         return true;
+    }
+
+    @Override
+    public Optional<Appointment> get(LocalDateTime appointment) {
+        return appointmetRepo.findByAppointmentDate(appointment);
+    }
+    @Override
+    public List<Appointment> getAppointmentsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        return appointmetRepo.findByAppointmentDateBetween(startDate, endDate);
     }
 }

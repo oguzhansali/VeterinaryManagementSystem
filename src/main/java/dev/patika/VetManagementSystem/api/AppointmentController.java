@@ -11,13 +11,23 @@ import dev.patika.VetManagementSystem.core.utilies.ResultHelper;
 import dev.patika.VetManagementSystem.dto.request.appointment.AppointmentSaveRequest;
 import dev.patika.VetManagementSystem.dto.request.appointment.AppointmentUpdateRequest;
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
+import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.dto.response.appointment.AppointmentResponse;
 import dev.patika.VetManagementSystem.dto.response.availableDate.AvailableDateResponse;
+import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.entity.*;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/appointments")
@@ -98,6 +108,54 @@ public class AppointmentController {
         this.appointmentService.delete(id);
         return ResultHelper.ok();
     }
+
+    @GetMapping("/{appointmentDate}/animal")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AnimalResponse> getAnimal(@PathVariable("appointmentDate")LocalDateTime appointmentDate){
+        Optional<Appointment> appointmentOptional = appointmentService.get(appointmentDate);
+        Appointment appointment=appointmentOptional.get();
+        return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getAnimal(),AnimalResponse.class));
+    }
+    @GetMapping("/{appointmentDate}/doctor")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<DoctorResponse> getDoctor(@PathVariable("appointmentDate")LocalDateTime appointmentDate){
+        Optional<Appointment> appointmentOptional = appointmentService.get(appointmentDate);
+        Appointment appointment=appointmentOptional.get();
+        return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getDoctor(),DoctorResponse.class));
+    }
+    @GetMapping("/doctors")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<Doctor>> getDoctors(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate, endDate);
+
+        List<Doctor> doctors = appointments.stream()
+                .map(Appointment::getDoctor)
+                .distinct()  // Doktorları benzersiz hale getirmek için
+                .collect(Collectors.toList());
+
+        return ResultHelper.success(doctors);
+    }
+
+ /*   @GetMapping("/doctors")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<Doctor>> getDoctors(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate, endDate);
+
+        Set<Doctor> doctorSet = appointments.stream()
+                .map(Appointment::getDoctor)
+                .collect(Collectors.toSet());  // Set kullanarak benzersiz doktorları topla
+
+        List<Doctor> doctors = new ArrayList<>(doctorSet);  // Set'i List'e dönüştür
+
+        return ResultHelper.success(doctors);
+    }*/
+
+
+
 
 
 }
