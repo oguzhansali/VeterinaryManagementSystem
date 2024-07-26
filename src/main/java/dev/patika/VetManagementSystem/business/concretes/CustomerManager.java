@@ -5,6 +5,7 @@ import dev.patika.VetManagementSystem.core.exception.EmailAlreadyExistsException
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
 import dev.patika.VetManagementSystem.core.utilies.Msg;
 import dev.patika.VetManagementSystem.dao.AnimalRepo;
+import dev.patika.VetManagementSystem.dao.AppointmetRepo;
 import dev.patika.VetManagementSystem.dao.CustomerRepo;
 import dev.patika.VetManagementSystem.dao.VaccineRepo;
 import dev.patika.VetManagementSystem.entity.Animal;
@@ -26,11 +27,13 @@ public class CustomerManager implements ICustomerService {
     private final CustomerRepo customerRepo;
     private  final AnimalRepo animalRepo;
     private final VaccineRepo vaccineRepo;
+    private final AppointmetRepo appointmetRepo;
 
-    public CustomerManager(CustomerRepo customerRepo,AnimalRepo animalRepo,VaccineRepo vaccineRepo) {
+    public CustomerManager(CustomerRepo customerRepo,AnimalRepo animalRepo,VaccineRepo vaccineRepo,AppointmetRepo appointmetRepo) {
         this.customerRepo = customerRepo;
         this.animalRepo=animalRepo;
         this.vaccineRepo=vaccineRepo;
+        this.appointmetRepo=appointmetRepo;
     }
 
     @Override
@@ -76,6 +79,8 @@ public class CustomerManager implements ICustomerService {
             }
 
         }
+
+        appointmetRepo.deleteByCustomerId(id);
         //Tüm Animal'ları sil
         animalRepo.deleteAll(animals);
 

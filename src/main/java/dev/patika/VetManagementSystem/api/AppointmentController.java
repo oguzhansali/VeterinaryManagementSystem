@@ -58,14 +58,11 @@ public class AppointmentController {
         Doctor doctor = this.doctorService.get(appointmentSaveRequest.getDoctorId());
         saveAppointment.setDoctor(doctor);
 
-        Customer customer = this.customerService.get(appointmentSaveRequest.getCustomerId());
-        saveAppointment.setCustomer(customer);
 
         Animal animal = this.animalService.get(appointmentSaveRequest.getAnimalId());
         saveAppointment.setAnimal(animal);
 
         Appointment savedAppointment = this.appointmentService.save(saveAppointment,
-                appointmentSaveRequest.getCustomerId(),
                 appointmentSaveRequest.getAnimalId(),
                 appointmentSaveRequest.getDoctorId());
 
@@ -152,8 +149,8 @@ public class AppointmentController {
         List<Doctor> doctors = new ArrayList<>(doctorSet);  // Set'i List'e dönüştür
 
         return ResultHelper.success(doctors);
-    }*/
-
+    }
+*/
 
 
 

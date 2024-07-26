@@ -4,6 +4,7 @@ import dev.patika.VetManagementSystem.business.abtracts.IDoctorService;
 import dev.patika.VetManagementSystem.core.exception.EmailAlreadyExistsException;
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
 import dev.patika.VetManagementSystem.core.utilies.Msg;
+import dev.patika.VetManagementSystem.dao.AppointmetRepo;
 import dev.patika.VetManagementSystem.dao.AvailableDateRepo;
 import dev.patika.VetManagementSystem.dao.DoctorRepo;
 import dev.patika.VetManagementSystem.entity.Doctor;
@@ -21,10 +22,12 @@ import java.util.Optional;
 public class DoctorManager implements IDoctorService {
     private final DoctorRepo doctorRepo;
     private final AvailableDateRepo availableDateRepo;
+    private final AppointmetRepo appointmetRepo;
 
-    public DoctorManager(DoctorRepo doctorRepo, AvailableDateRepo availableDateRepo) {
+    public DoctorManager(DoctorRepo doctorRepo, AvailableDateRepo availableDateRepo,AppointmetRepo appointmetRepo) {
         this.doctorRepo = doctorRepo;
         this.availableDateRepo=availableDateRepo;
+        this.appointmetRepo=appointmetRepo;
     }
 
     @Override
@@ -53,6 +56,7 @@ public class DoctorManager implements IDoctorService {
         Doctor doctor = doctorRepo.findById(id)
                 .orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
 
+        appointmetRepo.deleteByDoctorId(id);
         availableDateRepo.deleteByDoctorId(id);
         doctorRepo.delete(doctor);
         return true;

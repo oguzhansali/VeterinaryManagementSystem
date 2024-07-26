@@ -41,14 +41,13 @@ public class AppointmentManager implements IAppointmentService {
     }
     @Transactional
     @Override
-    public Appointment save(Appointment appointment, int customerId,int animalId,int doctorId) {
+    public Appointment save(Appointment appointment,int animalId,int doctorId) {
         //Daha önce oluşturulan appointmentleri kontrol eder ve aynı veri girilmesini engeller
         Optional<Appointment> existingAppointmentDate = appointmetRepo.findByAppointmentDate(appointment.getAppointmentDate());
         if (existingAppointmentDate.isPresent()){
             throw new AppointmentAlreadyExistsException(Msg.ALREADY_CREATEED);
         }
 
-        Customer customer = customerRepo.findById(customerId).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
         Animal animal = animalRepo.findById(animalId).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
         Doctor doctor = doctorRepo.findById(doctorId).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
 
@@ -60,7 +59,7 @@ public class AppointmentManager implements IAppointmentService {
             throw  new DoctorDoesNotAvailableException(Msg.NOT_AVAILABLE);
 
         }
-        appointment.setCustomer(customer);
+        //Animal ve doctor lar save edilir ve appointment return ettirilir
         appointment.setAnimal(animal);
         appointment.setDoctor(doctor);
         return appointmetRepo.save(appointment);

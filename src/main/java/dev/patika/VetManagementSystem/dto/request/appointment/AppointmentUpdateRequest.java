@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class AppointmentUpdateRequest {
     private int id;
     private LocalDateTime appointmentDate;
-    private int customerId;
     private int animalId;
     private int doctorId;
 
@@ -29,14 +28,6 @@ public class AppointmentUpdateRequest {
 
     public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public int getAnimalId() {

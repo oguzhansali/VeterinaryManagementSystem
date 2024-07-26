@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AppointmentSaveRequest {
     private LocalDateTime appointmentDate;
-    private int customerId;
     private int animalId;
     private int doctorId;
 
@@ -20,14 +19,6 @@ public class AppointmentSaveRequest {
 
     public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public int getAnimalId() {

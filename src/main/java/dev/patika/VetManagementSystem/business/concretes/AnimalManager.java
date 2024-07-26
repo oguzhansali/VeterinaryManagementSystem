@@ -4,6 +4,7 @@ import dev.patika.VetManagementSystem.business.abtracts.IAnimalService;
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
 import dev.patika.VetManagementSystem.core.utilies.Msg;
 import dev.patika.VetManagementSystem.dao.AnimalRepo;
+import dev.patika.VetManagementSystem.dao.AppointmetRepo;
 import dev.patika.VetManagementSystem.dao.CustomerRepo;
 import dev.patika.VetManagementSystem.dao.VaccineRepo;
 import dev.patika.VetManagementSystem.entity.Animal;
@@ -18,11 +19,13 @@ public class AnimalManager implements IAnimalService {
     private final AnimalRepo animalRepo;
     private final VaccineRepo vaccineRepo;
     private final CustomerRepo customerRepo;
+    private final AppointmetRepo appointmetRepo;
 
-    public AnimalManager(AnimalRepo animalRepo,VaccineRepo vaccineRepo,CustomerRepo customerRepo) {
+    public AnimalManager(AnimalRepo animalRepo,VaccineRepo vaccineRepo,CustomerRepo customerRepo,AppointmetRepo appointmetRepo) {
         this.animalRepo = animalRepo;
         this.vaccineRepo= vaccineRepo;
         this.customerRepo=customerRepo;
+        this.appointmetRepo=appointmetRepo;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class AnimalManager implements IAnimalService {
     public boolean delete(int id) {
         Animal animal = animalRepo.findById(id)
                 .orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
-
+        appointmetRepo.deleteByAnimalId(id);
         vaccineRepo.deleteByAnimalId(id);
         animalRepo.delete(animal);
         return true;

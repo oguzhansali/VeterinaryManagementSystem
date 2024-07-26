@@ -13,4 +13,9 @@ public interface AppointmetRepo extends JpaRepository<Appointment,Integer> {
     Optional<Appointment> findByAppointmentDate(LocalDateTime appoitment);
     List<Appointment> findByAppointmentDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
+    void deleteByDoctorId(int doctorId);
+    void deleteByCustomerId(int doctorId);
+    void deleteByAnimalId(int doctorId);
+
+
 }
