@@ -31,7 +31,7 @@ public class Customer {
     private String address;
     @Column(name = "customer_city")
     private String city;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
     private List<Animal> animals;
 
     @OneToMany(mappedBy = "customer")

@@ -1,5 +1,6 @@
 package dev.patika.VetManagementSystem.api;
 
+import dev.patika.VetManagementSystem.business.abtracts.IAnimalService;
 import dev.patika.VetManagementSystem.business.abtracts.ICustomerService;
 import dev.patika.VetManagementSystem.core.config.modelMapper.IModelMapperService;
 import dev.patika.VetManagementSystem.core.result.Result;
@@ -8,8 +9,10 @@ import dev.patika.VetManagementSystem.core.utilies.ResultHelper;
 import dev.patika.VetManagementSystem.dto.request.customer.CustomerSaveRequest;
 import dev.patika.VetManagementSystem.dto.request.customer.CustomerUpdateRequest;
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
+import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.dto.response.customer.CustomerResponse;
 import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
+import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Customer;
 import dev.patika.VetManagementSystem.entity.Doctor;
 import jakarta.validation.Valid;
@@ -17,15 +20,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/customers")
 public class CustomerController {
     private final ICustomerService customerService;
     private final IModelMapperService modelMapper;
+    private final IAnimalService animalService;
 
-    public CustomerController(ICustomerService customerService, IModelMapperService modelMapper) {
+    public CustomerController(ICustomerService customerService, IModelMapperService modelMapper,IAnimalService animalService) {
         this.customerService = customerService;
         this.modelMapper = modelMapper;
+        this.animalService=animalService;
     }
 
     @PostMapping()
@@ -68,6 +77,20 @@ public class CustomerController {
         this.customerService.delete(id);
         return ResultHelper.ok();
     }
+
+    @GetMapping("/{id}/animal")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AnimalResponse>> getAnimal(@PathVariable("id")int id){
+        Customer customer = this.customerService.get(id);
+        List<Animal> animals = customer.getAnimals();
+
+        List<AnimalResponse> animalResponses=animals.stream()
+                .map(animal -> this.modelMapper.forResponse().map(animal,AnimalResponse.class))
+                .collect(Collectors.toList());
+
+        return ResultHelper.success(animalResponses);
+    }
+
 
 
 }

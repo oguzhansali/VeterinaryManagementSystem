@@ -34,7 +34,7 @@ public class Animal {
     @JoinColumn(name = "animal_customer_id",referencedColumnName = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(mappedBy = "animal",fetch = FetchType.EAGER)
     private List<Vaccine> vaccines;
 
     @OneToMany(mappedBy = "animal")

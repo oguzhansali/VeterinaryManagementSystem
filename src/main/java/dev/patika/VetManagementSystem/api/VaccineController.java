@@ -10,6 +10,7 @@ import dev.patika.VetManagementSystem.dto.request.vaccine.VaccineUpdateRequest;
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
 import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.dto.response.vaccine.VaccineResponse;
+import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Doctor;
 import dev.patika.VetManagementSystem.entity.Vaccine;
 import jakarta.validation.Valid;
@@ -73,6 +74,8 @@ public class VaccineController {
         this.vaccineService.delete(id);
         return ResultHelper.ok();
     }
+
+
 
 
 

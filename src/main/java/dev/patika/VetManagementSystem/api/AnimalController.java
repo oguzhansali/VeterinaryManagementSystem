@@ -16,10 +16,14 @@ import dev.patika.VetManagementSystem.dto.response.vaccine.VaccineResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.AvailableDate;
 import dev.patika.VetManagementSystem.entity.Customer;
+import dev.patika.VetManagementSystem.entity.Vaccine;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/animals")
@@ -85,9 +89,15 @@ public class AnimalController {
 
     @GetMapping("/{id}/vaccine")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<VaccineResponse> getVaccine(@PathVariable("id")int id){
+    public ResultData<List<VaccineResponse>> getVaccine(@PathVariable("id")int id){
         Animal animal = this.animalService.get(id);
-        return ResultHelper.success(this.modelMapper.forResponse().map(animal.getVaccines(),VaccineResponse.class));
+        List<Vaccine> vaccines = animal.getVaccines();
+
+        List<VaccineResponse> vaccineResponses = vaccines.stream()
+                .map(vaccine -> this.modelMapper.forResponse().map(vaccine, VaccineResponse.class))
+                .collect(Collectors.toList());
+
+        return ResultHelper.success(vaccineResponses);
     }
 
 
