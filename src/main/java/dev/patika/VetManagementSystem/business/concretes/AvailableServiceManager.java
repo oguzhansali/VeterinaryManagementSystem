@@ -37,6 +37,9 @@ public class AvailableServiceManager implements IAvailableDateService {
 
     @Override
     public AvailableDate update(AvailableDate availableDate) {
+        if (!availableDateRepo.existsById(availableDate.getId())) {
+            throw new NotFoundException(Msg.NOT_FOUND);
+        }
         this.get(availableDate.getId());
         return this.availableDateRepo.save(availableDate);
     }

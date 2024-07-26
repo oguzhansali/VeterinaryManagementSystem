@@ -19,7 +19,7 @@ public class Vaccine {
     private int id;
     @Column(name = "vaccine_name")
     private String name;
-    @Column(name = "vaccine_code")
+    @Column(name = "vaccine_code",unique = true)
     private String code;
     @Column(name = "vaccine_protecStrtDate")
     private LocalDate protectionStrtDate;
