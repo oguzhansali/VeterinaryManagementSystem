@@ -51,13 +51,13 @@ public class AnimalController {
         return ResultHelper.created(this.modelMapper.forResponse().map(saveAnimal, AnimalResponse.class));
     }
 
-    // Belirli bir hayvanın müşteri bilgilerini alır
+    // Belirli bir hayvanın bilgilerini alır
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> get(@PathVariable("id") int id) {
-        Customer customer = this.customerService.get(id);
-        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
-        return ResultHelper.success(customerResponse);
+    public ResultData<AnimalResponse> get(@PathVariable("id") int id) {
+        Animal animal = this.animalService.get(id);
+        AnimalResponse animalResponse = this.modelMapper.forResponse().map(animal, AnimalResponse.class);
+        return ResultHelper.success(animalResponse);
     }
 
     // Hayvanların sayfalı listesini alır
@@ -104,6 +104,15 @@ public class AnimalController {
                 .collect(Collectors.toList());
 
         return ResultHelper.success(vaccineResponses);
+    }
+
+    //Hayvan ismine göre filtreleme yapar
+    @GetMapping("/name/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AnimalResponse> getByName(@PathVariable("name") String name) {
+        Animal animal = this.animalService.getByName(name);
+        AnimalResponse animalResponse = this.modelMapper.forResponse().map(animal, AnimalResponse.class);
+        return ResultHelper.success(animalResponse);
     }
 
 

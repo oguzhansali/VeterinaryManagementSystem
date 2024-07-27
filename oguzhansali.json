@@ -452,6 +452,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/customers/name/Ayşe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"customers",
+								"name",
+								"Ayşe"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -597,6 +619,28 @@
 								"animals",
 								"7",
 								"vaccine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/animals/name/Coni",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"animals",
+								"name",
+								"Coni"
 							]
 						}
 					},

@@ -97,4 +97,9 @@ public class CustomerManager implements ICustomerService {
 
         return true;
     }
+    //Müşteri ismine göre arama yapar
+    @Override
+    public Customer getByName(String name) {
+        return customerRepo.findByName(name).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+    }
 }

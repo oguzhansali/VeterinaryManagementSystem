@@ -10,4 +10,5 @@ public interface ICustomerService {
     Page<Customer> cursor(int page, int pageSie);
     Customer update(Customer customer);
     boolean delete(int id);
+    Customer getByName(String name);
 }

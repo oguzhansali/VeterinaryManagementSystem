@@ -100,6 +100,14 @@ public class CustomerController {
 
         return ResultHelper.success(animalResponses);
     }
+    //Müşteri ismine göre filtreleme yapar
+    @GetMapping("/name/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> getByName(@PathVariable("name") String name) {
+        Customer customer = this.customerService.getByName(name);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
+        return ResultHelper.success(customerResponse);
+    }
 
 
 }

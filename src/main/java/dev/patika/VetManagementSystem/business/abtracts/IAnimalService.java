@@ -4,6 +4,7 @@ import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Appointment;
+import dev.patika.VetManagementSystem.entity.Customer;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -16,5 +17,7 @@ public interface IAnimalService {
     Animal update(Animal animal);
     boolean delete(int id);
     List<AnimalResponse> getAnimalsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate);
+    Animal getByName(String name);
+
 
 }

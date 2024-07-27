@@ -100,5 +100,9 @@ public class AnimalManager implements IAnimalService {
         return animals.stream().map(animal -> modelMapper.forResponse().map(animal, AnimalResponse.class)).collect(Collectors.toList());
     }
 
-
+    //Hayvan ismine göre arama yapar
+    @Override
+    public Animal getByName(String name) {
+        return animalRepo.findByName(name).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
+    }
 }
