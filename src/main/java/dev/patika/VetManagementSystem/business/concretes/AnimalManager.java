@@ -1,18 +1,28 @@
 package dev.patika.VetManagementSystem.business.concretes;
 
 import dev.patika.VetManagementSystem.business.abtracts.IAnimalService;
+import dev.patika.VetManagementSystem.business.abtracts.IAppointmentService;
+import dev.patika.VetManagementSystem.core.config.modelMapper.IModelMapperService;
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
 import dev.patika.VetManagementSystem.core.utilies.Msg;
 import dev.patika.VetManagementSystem.dao.AnimalRepo;
 import dev.patika.VetManagementSystem.dao.AppointmetRepo;
 import dev.patika.VetManagementSystem.dao.CustomerRepo;
 import dev.patika.VetManagementSystem.dao.VaccineRepo;
+import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
+import dev.patika.VetManagementSystem.entity.Appointment;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AnimalManager implements IAnimalService {
@@ -20,12 +30,16 @@ public class AnimalManager implements IAnimalService {
     private final VaccineRepo vaccineRepo;
     private final CustomerRepo customerRepo;
     private final AppointmetRepo appointmetRepo;
+    private final IAppointmentService appointmentService;
+    private final IModelMapperService modelMapper;
 
-    public AnimalManager(AnimalRepo animalRepo,VaccineRepo vaccineRepo,CustomerRepo customerRepo,AppointmetRepo appointmetRepo) {
+    public AnimalManager(AnimalRepo animalRepo,VaccineRepo vaccineRepo,CustomerRepo customerRepo,AppointmetRepo appointmetRepo,IAppointmentService appointmentService,IModelMapperService modelMapper) {
         this.animalRepo = animalRepo;
         this.vaccineRepo= vaccineRepo;
         this.customerRepo=customerRepo;
         this.appointmetRepo=appointmetRepo;
+        this.appointmentService=appointmentService;
+        this.modelMapper=modelMapper;
     }
 
     @Override
@@ -64,4 +78,19 @@ public class AnimalManager implements IAnimalService {
         animalRepo.delete(animal);
         return true;
     }
+
+    @Override
+    public List<AnimalResponse> getAnimalsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate,endDate);
+
+        Set<Animal> animalSet = appointments.stream()
+                .map(Appointment::getAnimal)
+                .collect(Collectors.toSet());
+
+        List<Animal> animals = new ArrayList<>(animalSet);
+
+        return animals.stream().map(animal -> modelMapper.forResponse().map(animal,AnimalResponse.class)).collect(Collectors.toList());
+    }
+
+
 }

@@ -13,7 +13,6 @@ import dev.patika.VetManagementSystem.dto.request.appointment.AppointmentUpdateR
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
 import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.dto.response.appointment.AppointmentResponse;
-import dev.patika.VetManagementSystem.dto.response.availableDate.AvailableDateResponse;
 import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.entity.*;
 import jakarta.validation.Valid;
@@ -120,38 +119,40 @@ public class AppointmentController {
         Appointment appointment=appointmentOptional.get();
         return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getDoctor(),DoctorResponse.class));
     }
-    @GetMapping("/doctors")
+
+ /*   @GetMapping("/animals")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<Doctor>> getDoctors(
+    public ResultData<List<Animal>> getAnimal(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate, endDate);
 
-        List<Doctor> doctors = appointments.stream()
-                .map(Appointment::getDoctor)
+        List<Animal> animals = appointments.stream()
+                .map(Appointment::getAnimal)
                 .distinct()  // Doktorları benzersiz hale getirmek için
                 .collect(Collectors.toList());
 
-        return ResultHelper.success(doctors);
+        return ResultHelper.success(animals);
+    }*/
+    @GetMapping("/animals")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AnimalResponse>> getAnimals(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate){
+        List<AnimalResponse> animalResponses = animalService.getAnimalsWithinDateRange(startDate,endDate);
+        return ResultHelper.success(animalResponses);
     }
 
- /*   @GetMapping("/doctors")
+
+
+    @GetMapping("/doctors")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<Doctor>> getDoctors(
+    public ResultData<List<DoctorResponse>> getDoctors(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate, endDate);
-
-        Set<Doctor> doctorSet = appointments.stream()
-                .map(Appointment::getDoctor)
-                .collect(Collectors.toSet());  // Set kullanarak benzersiz doktorları topla
-
-        List<Doctor> doctors = new ArrayList<>(doctorSet);  // Set'i List'e dönüştür
-
-        return ResultHelper.success(doctors);
+        List<DoctorResponse> doctorResponses = doctorService.getDoctorsWithinDateRange(startDate, endDate);
+        return ResultHelper.success(doctorResponses);
     }
-*/
-
 
 
 

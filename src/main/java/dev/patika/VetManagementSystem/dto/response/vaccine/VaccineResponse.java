@@ -1,8 +1,11 @@
 package dev.patika.VetManagementSystem.dto.response.vaccine;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.time.LocalDate;
 
 @ToString
 @AllArgsConstructor
@@ -11,6 +14,9 @@ public class VaccineResponse {
     private int id;
     private String name;
     private String code;
+    private LocalDate protectionStrtDate;
+    private LocalDate protectionFnshDate;
+
     private int animalId;
 
     public String getName() {
@@ -43,5 +49,21 @@ public class VaccineResponse {
 
     public void setAnimalId(int animalId) {
         this.animalId = animalId;
+    }
+
+    public LocalDate getProtectionStrtDate() {
+        return protectionStrtDate;
+    }
+
+    public void setProtectionStrtDate(LocalDate protectionStrtDate) {
+        this.protectionStrtDate = protectionStrtDate;
+    }
+
+    public LocalDate getProtectionFnshDate() {
+        return protectionFnshDate;
+    }
+
+    public void setProtectionFnshDate(LocalDate protectionFnshDate) {
+        this.protectionFnshDate = protectionFnshDate;
     }
 }
