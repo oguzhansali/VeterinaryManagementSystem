@@ -12,18 +12,18 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Doctor {
+public class Doctor {//Doctor temsil eder ve diğer classlar ile ilişkileri tanımlar
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "doctor_id")
-    private  int id;
+    private int id;
     @NotNull
     @Column(name = "doctor_name")
     private String name;
     @Column(name = "doctor_phone")
     private String phone;
     @Email
-    @Column(name = "doctor_mail",unique = true)
+    @Column(name = "doctor_mail", unique = true)
     private String mail;
     @Column(name = "doctor_address")
     private String address;

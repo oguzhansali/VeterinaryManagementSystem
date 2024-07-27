@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class VaccineResponse {
+public class VaccineResponse {//Vaccine bilgilerini kullanıcıya sunar
     private int id;
     private String name;
     private String code;

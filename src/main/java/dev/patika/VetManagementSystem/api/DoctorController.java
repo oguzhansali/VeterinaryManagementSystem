@@ -19,31 +19,38 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/doctors")
 public class DoctorController {
-    private  final IDoctorService doctorService;
+    private final IDoctorService doctorService;
     private final IAvailableDateService availableDateService;
 
     private final IModelMapperService modelMapper;
 
-    public DoctorController(IDoctorService doctorService, IModelMapperService modelMapper,IAvailableDateService availableDateService) {
+    public DoctorController(IDoctorService doctorService, IModelMapperService modelMapper, IAvailableDateService availableDateService) {
         this.doctorService = doctorService;
         this.modelMapper = modelMapper;
-        this.availableDateService= availableDateService;
+        this.availableDateService = availableDateService;
     }
 
+    // Yeni bir doktor kaydetme isteği alır
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<DoctorResponse> save(@Valid @RequestBody DoctorSaveRequests doctorSaveRequests){
-        Doctor saveDoctor = this.modelMapper.forRequest().map(doctorSaveRequests,Doctor.class);
+    public ResultData<DoctorResponse> save(@Valid @RequestBody DoctorSaveRequests doctorSaveRequests) {
+        // Doktor verilerini DTO'dan Entity'ye dönüştürür
+        Doctor saveDoctor = this.modelMapper.forRequest().map(doctorSaveRequests, Doctor.class);
+        // Doktoru kaydeder
         this.doctorService.save(saveDoctor);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveDoctor,DoctorResponse.class));
+        return ResultHelper.created(this.modelMapper.forResponse().map(saveDoctor, DoctorResponse.class));
     }
+
+    // Belirli bir doktor bilgilerini alır
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<DoctorResponse> get(@PathVariable("id") int id){
+    public ResultData<DoctorResponse> get(@PathVariable("id") int id) {
         Doctor doctor = this.doctorService.get(id);
-        DoctorResponse doctorResponse = this.modelMapper.forResponse().map(doctor,DoctorResponse.class);
+        DoctorResponse doctorResponse = this.modelMapper.forResponse().map(doctor, DoctorResponse.class);
         return ResultHelper.success(doctorResponse);
     }
+
+    // Doktorların sayfalı listesini alır
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<DoctorResponse>> cursor(
@@ -56,24 +63,25 @@ public class DoctorController {
 
         return ResultHelper.cursor(doctorResponsePage);
     }
+
+    // Belirli bir doktor bilgisini günceller
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<DoctorResponse> update(@Valid @RequestBody DoctorUpdateRequest doctorUpdateRequest){
+    public ResultData<DoctorResponse> update(@Valid @RequestBody DoctorUpdateRequest doctorUpdateRequest) {
         this.doctorService.get(doctorUpdateRequest.getId());
-        Doctor updateDoctor=this.modelMapper.forRequest().map(doctorUpdateRequest,Doctor.class);
+        Doctor updateDoctor = this.modelMapper.forRequest().map(doctorUpdateRequest, Doctor.class);
         this.doctorService.update(updateDoctor);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateDoctor,DoctorResponse.class));
+        return ResultHelper.success(this.modelMapper.forResponse().map(updateDoctor, DoctorResponse.class));
 
     }
 
+    // Belirli bir doktor bilgisini siler
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Result delete(@PathVariable("id")int id){
+    public Result delete(@PathVariable("id") int id) {
         this.doctorService.delete(id);
         return ResultHelper.ok();
     }
-
-
 
 
 }

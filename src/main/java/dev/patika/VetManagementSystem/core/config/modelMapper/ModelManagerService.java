@@ -16,12 +16,16 @@ public class ModelManagerService implements IModelMapperService{
 
     @Override
     public ModelMapper forRequest() {
+        // ModelMapper konfigürasyonunu, belirsizlikleri göz ardı edecek ve
+        // eşleşme stratejisini STANDARD olarak ayarlayacak şekilde yapılandırır
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true).setMatchingStrategy(MatchingStrategies.STANDARD);
         return this.modelMapper;
     }
 
     @Override
     public ModelMapper forResponse() {
+        // ModelMapper konfigürasyonunu, belirsizlikleri göz ardı edecek ve
+        // eşleşme stratejisini LOOSE olarak ayarlayacak şekilde yapılandırır
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true).setMatchingStrategy(MatchingStrategies.LOOSE);
         return this.modelMapper;
     }

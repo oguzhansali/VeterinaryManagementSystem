@@ -5,10 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
+
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CursorResponse<T> {
+public class CursorResponse<T> {//Cursor bilgilerini kullanıcıya sunar
     private int pageNumber;
     private int pageSize;
     private long totalElements;
@@ -26,7 +27,7 @@ public class CursorResponse<T> {
         return pageSize;
     }
 
-    public void setPageSize (int pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 

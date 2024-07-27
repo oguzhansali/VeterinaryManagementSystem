@@ -10,11 +10,9 @@ import dev.patika.VetManagementSystem.dto.request.animal.AnimalSaveRequest;
 import dev.patika.VetManagementSystem.dto.request.animal.AnimalUpdateRequest;
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
 import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
-import dev.patika.VetManagementSystem.dto.response.availableDate.AvailableDateResponse;
 import dev.patika.VetManagementSystem.dto.response.customer.CustomerResponse;
 import dev.patika.VetManagementSystem.dto.response.vaccine.VaccineResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
-import dev.patika.VetManagementSystem.entity.AvailableDate;
 import dev.patika.VetManagementSystem.entity.Customer;
 import dev.patika.VetManagementSystem.entity.Vaccine;
 import jakarta.validation.Valid;
@@ -40,24 +38,29 @@ public class AnimalController {
         this.modelMapper = modelMapper;
     }
 
+    //Yeni bir hayvan kaydetme isteği alır
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<AnimalResponse> save (@Valid @RequestBody AnimalSaveRequest animalSaveRequest){
-        Animal saveAnimal = this.modelMapper.forRequest().map(animalSaveRequest,Animal.class);
-
+    public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest animalSaveRequest) {
+        Animal saveAnimal = this.modelMapper.forRequest().map(animalSaveRequest, Animal.class);
+        // İlgili müşteri bilgilerini alır
         Customer customer = this.customerService.get(animalSaveRequest.getCustomerId());
         saveAnimal.setCustomer(customer);
-
+        // Hayvanı kaydeder
         this.animalService.save(saveAnimal);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveAnimal,AnimalResponse.class));
+        return ResultHelper.created(this.modelMapper.forResponse().map(saveAnimal, AnimalResponse.class));
     }
+
+    // Belirli bir hayvanın müşteri bilgilerini alır
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> get(@PathVariable("id")int id){
+    public ResultData<CustomerResponse> get(@PathVariable("id") int id) {
         Customer customer = this.customerService.get(id);
-        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer,CustomerResponse.class);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
         return ResultHelper.success(customerResponse);
     }
+
+    // Hayvanların sayfalı listesini alır
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<AnimalResponse>> cursor(
@@ -71,25 +74,28 @@ public class AnimalController {
         return ResultHelper.cursor(animalResponsePage);
     }
 
+    // Belirli bir hayvanın bilgilerini günceller
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest){
+    public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest) {
         this.animalService.get(animalUpdateRequest.getId());
-        Animal updateAnimal = this.modelMapper.forRequest().map(animalUpdateRequest,Animal.class);
+        Animal updateAnimal = this.modelMapper.forRequest().map(animalUpdateRequest, Animal.class);
         this.animalService.update(updateAnimal);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateAnimal,AnimalResponse.class));
+        return ResultHelper.success(this.modelMapper.forResponse().map(updateAnimal, AnimalResponse.class));
     }
 
+    // Belirli bir hayvanı siler
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Result delete(@PathVariable("id")int id){
+    public Result delete(@PathVariable("id") int id) {
         this.animalService.delete(id);
         return ResultHelper.ok();
     }
 
+    // Belirli bir hayvanın aşı bilgilerini alır
     @GetMapping("/{id}/vaccine")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<VaccineResponse>> getVaccine(@PathVariable("id")int id){
+    public ResultData<List<VaccineResponse>> getVaccine(@PathVariable("id") int id) {
         Animal animal = this.animalService.get(id);
         List<Vaccine> vaccines = animal.getVaccines();
 

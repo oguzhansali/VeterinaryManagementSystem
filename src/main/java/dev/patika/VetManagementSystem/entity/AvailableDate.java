@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AvailableDate {
+public class AvailableDate {//AvailableDate temsil eder ve diğer classlar ile ilişkileri tanımlar
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "availableDate_id")

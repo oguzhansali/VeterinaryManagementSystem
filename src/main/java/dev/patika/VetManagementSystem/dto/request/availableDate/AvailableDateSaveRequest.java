@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AvailableDateSaveRequest {
+public class AvailableDateSaveRequest {//AvailableDate kayıt etmek için gerekli verileri tutar
 
     private LocalDateTime availableDate;
     private int doctorId;

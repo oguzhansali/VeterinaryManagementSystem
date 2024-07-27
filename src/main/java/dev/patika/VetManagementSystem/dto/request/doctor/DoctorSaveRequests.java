@@ -9,10 +9,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class DoctorSaveRequests {
+public class DoctorSaveRequests {//Doctor kayıt etmek için gerekli verileri tutar
     @NotNull(message = "Doctor Adı boş olamaz")
     private String name;
-
     @NotNull(message = "Doktor iletişim bilgisi boş olamaz")
     private String phone;
     @NotNull(message = "Doktor e-posta adresi boş olamaz")

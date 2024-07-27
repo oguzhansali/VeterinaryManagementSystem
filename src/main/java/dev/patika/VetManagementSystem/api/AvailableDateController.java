@@ -18,14 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/v1/availableDate")
 public class AvailableDateController {
-    private  final IDoctorService doctorService;
+    private final IDoctorService doctorService;
 
     private final IModelMapperService modelMapper;
     private final IAvailableDateService availableDateService;
@@ -36,33 +32,40 @@ public class AvailableDateController {
         this.availableDateService = availableDateService;
     }
 
+    // Yeni bir müsait tarih kaydetme isteği alır
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest){
-        AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(availableDateSaveRequest,AvailableDate.class);
+    public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest) {
+        // Müsait tarih verilerini DTO'dan Entity'ye dönüştürür
+        AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(availableDateSaveRequest, AvailableDate.class);
 
-        Doctor doctor= this.doctorService.get(availableDateSaveRequest.getDoctorId());
+        // İlgili doktor bilgilerini alır
+        Doctor doctor = this.doctorService.get(availableDateSaveRequest.getDoctorId());
         saveAvailableDate.setDoctor(doctor);
 
-
+        // Müsait tarihi kaydeder
         this.availableDateService.save(saveAvailableDate);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveAvailableDate,AvailableDateResponse.class));
+        return ResultHelper.created(this.modelMapper.forResponse().map(saveAvailableDate, AvailableDateResponse.class));
     }
+
+    // Belirli bir müsait tarih bilgilerini alır
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AvailableDateResponse> get(@PathVariable("id")int id){
+    public ResultData<AvailableDateResponse> get(@PathVariable("id") int id) {
         AvailableDate availableDate = this.availableDateService.get(id);
-        AvailableDateResponse availableDateResponse = this.modelMapper.forResponse().map(availableDate,AvailableDateResponse.class);
+        AvailableDateResponse availableDateResponse = this.modelMapper.forResponse().map(availableDate, AvailableDateResponse.class);
         return ResultHelper.success(availableDateResponse);
     }
 
+    // Belirli bir müsait tarihin doktor bilgilerini alır
     @GetMapping("/{id}/doctors")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<DoctorResponse> getDoctor(@PathVariable("id")int id){
+    public ResultData<DoctorResponse> getDoctor(@PathVariable("id") int id) {
         AvailableDate availableDate = this.availableDateService.get(id);
-        return ResultHelper.success(this.modelMapper.forResponse().map(availableDate.getDoctor(),DoctorResponse.class));
+        return ResultHelper.success(this.modelMapper.forResponse().map(availableDate.getDoctor(), DoctorResponse.class));
     }
 
+    // Müsait tarihlerinin sayfalı listesini alır
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<AvailableDateResponse>> cursor(
@@ -76,21 +79,23 @@ public class AvailableDateController {
         return ResultHelper.cursor(availableDateResponsePage);
     }
 
+    // Belirli bir müsait tarihi günceller
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AvailableDateResponse> update(@Valid @RequestBody AvailableDateUpdateRequest availableDateUpdateRequest){
+    public ResultData<AvailableDateResponse> update(@Valid @RequestBody AvailableDateUpdateRequest availableDateUpdateRequest) {
         this.availableDateService.get(availableDateUpdateRequest.getId());
-        AvailableDate updateAvailableDate= this.modelMapper.forRequest().map(availableDateUpdateRequest,AvailableDate.class);
+        AvailableDate updateAvailableDate = this.modelMapper.forRequest().map(availableDateUpdateRequest, AvailableDate.class);
         this.availableDateService.update(updateAvailableDate);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateAvailableDate,AvailableDateResponse.class));
+        return ResultHelper.success(this.modelMapper.forResponse().map(updateAvailableDate, AvailableDateResponse.class));
     }
+
+    // Belirli bir müsait tarihi siler
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Result delete(@PathVariable("id")int id){
+    public Result delete(@PathVariable("id") int id) {
         this.availableDateService.delete(id);
         return ResultHelper.ok();
     }
-
 
 
 }

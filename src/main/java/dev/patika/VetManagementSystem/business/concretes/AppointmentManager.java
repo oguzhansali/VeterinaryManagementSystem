@@ -11,7 +11,6 @@ import dev.patika.VetManagementSystem.dao.CustomerRepo;
 import dev.patika.VetManagementSystem.dao.DoctorRepo;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Appointment;
-import dev.patika.VetManagementSystem.entity.Customer;
 import dev.patika.VetManagementSystem.entity.Doctor;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -39,49 +38,55 @@ public class AppointmentManager implements IAppointmentService {
         this.animalRepo = animalRepo;
         this.doctorRepo = doctorRepo;
     }
+
+    //Randevu kaydeder
     @Transactional
     @Override
-    public Appointment save(Appointment appointment,int animalId,int doctorId) {
+    public Appointment save(Appointment appointment, int animalId, int doctorId) {
         //Daha önce oluşturulan appointmentleri kontrol eder ve aynı veri girilmesini engeller
         Optional<Appointment> existingAppointmentDate = appointmetRepo.findByAppointmentDate(appointment.getAppointmentDate());
-        if (existingAppointmentDate.isPresent()){
+        if (existingAppointmentDate.isPresent()) {
             throw new AppointmentAlreadyExistsException(Msg.ALREADY_CREATEED);
         }
+        // Hayvan ve doktor nesnelerini kontrol eder
+        Animal animal = animalRepo.findById(animalId).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+        Doctor doctor = doctorRepo.findById(doctorId).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
 
-        Animal animal = animalRepo.findById(animalId).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
-        Doctor doctor = doctorRepo.findById(doctorId).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
-
-        //Doktor available durumu kontrol edilir
-        boolean isDoctorAvailable= doctor.getAvailableDates().stream()
+        //Doktor uygunluk durumu kontrol edilir
+        boolean isDoctorAvailable = doctor.getAvailableDates().stream()
                 .anyMatch(availableDate -> availableDate.getAvailableDate().equals(appointment.getAppointmentDate()));
 
-        if (!isDoctorAvailable){
-            throw  new DoctorDoesNotAvailableException(Msg.NOT_AVAILABLE);
+        if (!isDoctorAvailable) {
+            throw new DoctorDoesNotAvailableException(Msg.NOT_AVAILABLE);
 
         }
-        //Animal ve doctor lar save edilir ve appointment return ettirilir
+        // Hayvan ve doktor bilgilerini randevuya ekler ve kaydeder
         appointment.setAnimal(animal);
         appointment.setDoctor(doctor);
         return appointmetRepo.save(appointment);
     }
 
+    // Belirli bir randevuyu alır
     @Override
     public Appointment get(int id) {
-        return appointmetRepo.findById(id).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
+        return appointmetRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
     }
 
+    // Randevuları sayfalı olarak alır
     @Override
     public Page<Appointment> cursor(int page, int pageSie) {
-        Pageable pageable = PageRequest.of(page,pageSie);
+        Pageable pageable = PageRequest.of(page, pageSie);
         return this.appointmetRepo.findAll(pageable);
     }
 
+    // Belirli bir randevuyu günceller
     @Override
     public Appointment update(Appointment appointment) {
         this.get(appointment.getId());
         return this.appointmetRepo.save(appointment);
     }
 
+    // Belirli bir randevuyu siler
     @Override
     public boolean delete(int id) {
         Appointment appointment = this.get(id);
@@ -89,10 +94,13 @@ public class AppointmentManager implements IAppointmentService {
         return true;
     }
 
+    // Belirli bir tarihli randevuyu alır
     @Override
     public Optional<Appointment> get(LocalDateTime appointment) {
         return appointmetRepo.findByAppointmentDate(appointment);
     }
+
+    // Belirli bir tarih aralığında olan randevuları alır
     @Override
     public List<Appointment> getAppointmentsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         return appointmetRepo.findByAppointmentDateBetween(startDate, endDate);

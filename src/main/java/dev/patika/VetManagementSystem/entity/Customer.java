@@ -14,24 +14,24 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class Customer {//Customer temsil eder ve diğer classlar ile ilişkileri tanımlar
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private  int id;
+    private int id;
     @NotNull
     @Column(name = "customer_name")
     private String name;
     @Column(name = "customer_phone")
     private String phone;
     @Email
-    @Column(name = "customer_mail",unique = true)
+    @Column(name = "customer_mail", unique = true)
     private String mail;
     @Column(name = "customer_address")
     private String address;
     @Column(name = "customer_city")
     private String city;
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<Animal> animals;
 
     @OneToMany(mappedBy = "customer")

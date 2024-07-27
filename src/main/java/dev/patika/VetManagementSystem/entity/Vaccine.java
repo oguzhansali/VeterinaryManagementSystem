@@ -12,14 +12,14 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Vaccine {
+public class Vaccine {//Vaccine temsil eder ve diğer classlar ile ilişkileri tanımlar
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vaccine_id")
     private int id;
     @Column(name = "vaccine_name")
     private String name;
-    @Column(name = "vaccine_code",unique = true)
+    @Column(name = "vaccine_code", unique = true)
     private String code;
     @Column(name = "vaccine_protecStrtDate")
     private LocalDate protectionStrtDate;
@@ -27,7 +27,7 @@ public class Vaccine {
     private LocalDate protectionFnshDate;
 
     @ManyToOne
-    @JoinColumn(name = "vaccine_animal_id",referencedColumnName = "animal_id")
+    @JoinColumn(name = "vaccine_animal_id", referencedColumnName = "animal_id")
     private Animal animal;
 
     public int getId() {

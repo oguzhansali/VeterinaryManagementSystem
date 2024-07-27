@@ -11,17 +11,15 @@ import dev.patika.VetManagementSystem.dto.request.customer.CustomerUpdateRequest
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
 import dev.patika.VetManagementSystem.dto.response.animal.AnimalResponse;
 import dev.patika.VetManagementSystem.dto.response.customer.CustomerResponse;
-import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Customer;
-import dev.patika.VetManagementSystem.entity.Doctor;
+
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,26 +29,33 @@ public class CustomerController {
     private final IModelMapperService modelMapper;
     private final IAnimalService animalService;
 
-    public CustomerController(ICustomerService customerService, IModelMapperService modelMapper,IAnimalService animalService) {
+    public CustomerController(ICustomerService customerService, IModelMapperService modelMapper, IAnimalService animalService) {
         this.customerService = customerService;
         this.modelMapper = modelMapper;
-        this.animalService=animalService;
+        this.animalService = animalService;
     }
 
+    // Yeni bir müşteri kaydetme isteği alır
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest customerSaveRequest){
-        Customer saveCustomer = this.modelMapper.forRequest().map(customerSaveRequest,Customer.class);
+    public ResultData<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest customerSaveRequest) {
+        // Müşteri verilerini DTO'dan Entity'ye dönüştürür
+        Customer saveCustomer = this.modelMapper.forRequest().map(customerSaveRequest, Customer.class);
+        // Müşteriyi kaydeder
         this.customerService.save(saveCustomer);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveCustomer,CustomerResponse.class));
+        return ResultHelper.created(this.modelMapper.forResponse().map(saveCustomer, CustomerResponse.class));
     }
+
+    // Belirli bir müşteri bilgilerini alır
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public  ResultData<CustomerResponse> get(@PathVariable("id")int id){
-        Customer customer =this.customerService.get(id);
-        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer,CustomerResponse.class);
+    public ResultData<CustomerResponse> get(@PathVariable("id") int id) {
+        Customer customer = this.customerService.get(id);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
         return ResultHelper.success(customerResponse);
     }
+
+    // Müşterilerin sayfalı listesini alır
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<CustomerResponse>> cursor(
@@ -63,34 +68,38 @@ public class CustomerController {
 
         return ResultHelper.cursor(customerResponsePage);
     }
+
+    // Belirli bir müşteri bilgisini günceller
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest){
+    public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest) {
         this.customerService.get(customerUpdateRequest.getId());
-        Customer updateCustomer= this.modelMapper.forRequest().map(customerUpdateRequest,Customer.class);
+        Customer updateCustomer = this.modelMapper.forRequest().map(customerUpdateRequest, Customer.class);
         this.customerService.update(updateCustomer);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateCustomer,CustomerResponse.class));
+        return ResultHelper.success(this.modelMapper.forResponse().map(updateCustomer, CustomerResponse.class));
     }
+
+    // Belirli bir müşteri bilgisini siler
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Result delete(@PathVariable("id")int id){
+    public Result delete(@PathVariable("id") int id) {
         this.customerService.delete(id);
         return ResultHelper.ok();
     }
 
+    // Belirli bir müşterinin sahip olduğu hayvanların listesini alır
     @GetMapping("/{id}/animal")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<AnimalResponse>> getAnimal(@PathVariable("id")int id){
+    public ResultData<List<AnimalResponse>> getAnimal(@PathVariable("id") int id) {
         Customer customer = this.customerService.get(id);
         List<Animal> animals = customer.getAnimals();
 
-        List<AnimalResponse> animalResponses=animals.stream()
-                .map(animal -> this.modelMapper.forResponse().map(animal,AnimalResponse.class))
+        List<AnimalResponse> animalResponses = animals.stream()
+                .map(animal -> this.modelMapper.forResponse().map(animal, AnimalResponse.class))
                 .collect(Collectors.toList());
 
         return ResultHelper.success(animalResponses);
     }
-
 
 
 }

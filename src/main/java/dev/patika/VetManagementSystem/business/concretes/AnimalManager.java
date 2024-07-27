@@ -33,15 +33,16 @@ public class AnimalManager implements IAnimalService {
     private final IAppointmentService appointmentService;
     private final IModelMapperService modelMapper;
 
-    public AnimalManager(AnimalRepo animalRepo,VaccineRepo vaccineRepo,CustomerRepo customerRepo,AppointmetRepo appointmetRepo,IAppointmentService appointmentService,IModelMapperService modelMapper) {
+    public AnimalManager(AnimalRepo animalRepo, VaccineRepo vaccineRepo, CustomerRepo customerRepo, AppointmetRepo appointmetRepo, IAppointmentService appointmentService, IModelMapperService modelMapper) {
         this.animalRepo = animalRepo;
-        this.vaccineRepo= vaccineRepo;
-        this.customerRepo=customerRepo;
-        this.appointmetRepo=appointmetRepo;
-        this.appointmentService=appointmentService;
-        this.modelMapper=modelMapper;
+        this.vaccineRepo = vaccineRepo;
+        this.customerRepo = customerRepo;
+        this.appointmetRepo = appointmetRepo;
+        this.appointmentService = appointmentService;
+        this.modelMapper = modelMapper;
     }
 
+    // Yeni bir hayvan kaydeder
     @Override
     public Animal save(Animal animal) {
         // Customer nesnesini kontrol eder
@@ -51,37 +52,44 @@ public class AnimalManager implements IAnimalService {
         return animalRepo.save(animal);
     }
 
+    // Belirli bir hayvanın bilgilerini alır
     @Override
     public Animal get(int id) {
-        return animalRepo.findById(id).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
+        return animalRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
     }
 
+    // Hayvanları sayfalı olarak alır
     @Override
     public Page<Animal> cursor(int page, int pageSie) {
-        Pageable pageable = PageRequest.of(page,pageSie);
+        Pageable pageable = PageRequest.of(page, pageSie);
         return this.animalRepo.findAll(pageable);
     }
 
+    // Belirli bir hayvanın bilgisini günceller
     @Override
     public Animal update(Animal animal) {
         this.get(animal.getId());
         return this.animalRepo.save(animal);
     }
 
+    // Belirli bir hayvanın bilgisini siler
     @Transactional
     @Override
     public boolean delete(int id) {
         Animal animal = animalRepo.findById(id)
-                .orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+        // Hayvana ait randevuları ve aşıları siler
         appointmetRepo.deleteByAnimalId(id);
         vaccineRepo.deleteByAnimalId(id);
+        // Hayvanı siler
         animalRepo.delete(animal);
         return true;
     }
 
+    // Belirli bir tarih aralığında randevusu olan hayvanları alır
     @Override
     public List<AnimalResponse> getAnimalsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate,endDate);
+        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate, endDate);
 
         Set<Animal> animalSet = appointments.stream()
                 .map(Appointment::getAnimal)
@@ -89,7 +97,7 @@ public class AnimalManager implements IAnimalService {
 
         List<Animal> animals = new ArrayList<>(animalSet);
 
-        return animals.stream().map(animal -> modelMapper.forResponse().map(animal,AnimalResponse.class)).collect(Collectors.toList());
+        return animals.stream().map(animal -> modelMapper.forResponse().map(animal, AnimalResponse.class)).collect(Collectors.toList());
     }
 
 

@@ -5,10 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppointmentUpdateRequest {
+public class AppointmentUpdateRequest {//Appointment güncellemek için gerekli verileri tutar
     private int id;
     private LocalDateTime appointmentDate;
     private int animalId;

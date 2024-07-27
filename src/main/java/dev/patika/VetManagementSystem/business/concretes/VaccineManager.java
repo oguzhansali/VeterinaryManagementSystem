@@ -19,6 +19,7 @@ public class VaccineManager implements IVaccineService {
     private final VaccineRepo vaccineRepo;
     private final AnimalRepo animalRepo;
 
+    // Yapıcı metod, VaccineRepo ve AnimalRepo bağımlılıklarını alır
     public VaccineManager(VaccineRepo vaccineRepo,AnimalRepo animalRepo) {
         this.vaccineRepo = vaccineRepo;
         this.animalRepo=animalRepo;
@@ -26,33 +27,39 @@ public class VaccineManager implements IVaccineService {
 
     @Override
     public Vaccine save(Vaccine vaccine) {
-        // Animal nesnesinini kontrol eder
+        // Vaccine nesnesinin ilişkilendirildiği Animal nesnesinin varlığını kontrol eder
         if (vaccine.getAnimal() == null || !animalRepo.existsById(vaccine.getAnimal().getId())) {
             throw new NotFoundException(Msg.NOT_FOUND);
         }
-
+        // Vaccine nesnesini kaydeder
         return vaccineRepo.save(vaccine);
     }
 
     @Override
     public Vaccine get(int id) {
+        // Belirtilen ID'ye sahip Vaccine nesnesini getirir;
+        // bulunamazsa NotFoundException fırlatır
         return vaccineRepo.findById(id).orElseThrow(()-> new NotFoundException(Msg.NOT_FOUND));
     }
 
     @Override
     public Page<Vaccine> cursor(int page, int pageSie) {
+        // Sayfalama için Pageable nesnesi oluşturur ve bir sayfa vaccine verisini döner
         Pageable pageable = PageRequest.of(page,pageSie);
         return this.vaccineRepo.findAll(pageable);
     }
 
     @Override
     public Vaccine update(Vaccine vaccine) {
+        // Güncellenmek istenen vaccine nesnesinin mevcut olup olmadığını kontrol eder
         this.get(vaccine.getId());
+        // Vaccine nesnesinin bilgilerini günceller
         return this.vaccineRepo.save(vaccine);
     }
 
     @Override
     public boolean delete(int id) {
+        // Belirtilen ID'ye sahip Vaccine nesnesini getirir ve siler
         Vaccine vaccine = this.get(id);
         this.vaccineRepo.delete(vaccine);
         return true;
@@ -60,6 +67,7 @@ public class VaccineManager implements IVaccineService {
 
     @Override
     public List<Vaccine> findByProtectionFnshDateBetween(LocalDate startDate, LocalDate endDate) {
+        // Koruma bitiş tarihi belirtilen aralıkta olan vaccine'leri getirir
         return vaccineRepo.findByProtectionFnshDateBetween(startDate,endDate);
     }
 }

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class VaccineUpdateRequest {
+public class VaccineUpdateRequest {//Vaccine güncellemek için gerekli verileri tutar
     private int id;
     private String name;
     private String code;

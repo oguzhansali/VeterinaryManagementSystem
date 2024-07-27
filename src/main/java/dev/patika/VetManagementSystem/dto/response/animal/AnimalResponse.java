@@ -8,7 +8,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalResponse {
+public class AnimalResponse {//Animal bilgilerini kullanıcıya sunar
     private int id;
     private String name;
     private  String species;

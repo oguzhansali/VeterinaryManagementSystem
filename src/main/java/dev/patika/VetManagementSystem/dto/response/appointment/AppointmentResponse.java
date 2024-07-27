@@ -5,10 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppointmentResponse {
+public class AppointmentResponse {//Appointment bilgilerini kullanıcıya sunar
     private int id;
     private LocalDateTime appointmentDate;
     private int animalId;

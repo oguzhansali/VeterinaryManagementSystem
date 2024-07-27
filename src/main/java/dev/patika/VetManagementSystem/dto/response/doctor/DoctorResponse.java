@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorResponse {
+public class DoctorResponse {//Doctor bilgilerini kullanıcıya sunar
     private int id;
     @NotNull
     @NotEmpty

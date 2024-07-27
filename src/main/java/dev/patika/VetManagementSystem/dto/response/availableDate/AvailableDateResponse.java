@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AvailableDateResponse {
+public class AvailableDateResponse {//AvailableDate bilgilerini kullanıcıya sunar
     private int id;
     @NotNull
     private LocalDateTime availableDate;

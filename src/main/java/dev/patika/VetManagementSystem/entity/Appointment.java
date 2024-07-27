@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Appointment {
+public class Appointment {//Appointment temsil eder ve diğer classlar ile ilişkileri tanımlar
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
@@ -18,13 +18,13 @@ public class Appointment {
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
     @ManyToOne
-    @JoinColumn(name = "appointmet_customer_ıd",referencedColumnName = "customer_id")
+    @JoinColumn(name = "appointmet_customer_ıd", referencedColumnName = "customer_id")
     private Customer customer;
     @ManyToOne
-    @JoinColumn(name = "appointment_animal_id",referencedColumnName = "animal_id")
+    @JoinColumn(name = "appointment_animal_id", referencedColumnName = "animal_id")
     private Animal animal;
     @ManyToOne
-    @JoinColumn(name = "appointment_doctor_id",referencedColumnName = "doctor_id")
+    @JoinColumn(name = "appointment_doctor_id", referencedColumnName = "doctor_id")
     private Doctor doctor;
 
     public int getId() {

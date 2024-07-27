@@ -5,13 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalUpdateRequest {
+public class AnimalUpdateRequest {//Hayvan güncellemek için gerekli verileri tutar
     private int id;
     private String name;
-    private  String species;
+    private String species;
     private String breed;
     private String Gender;
     private String colour;

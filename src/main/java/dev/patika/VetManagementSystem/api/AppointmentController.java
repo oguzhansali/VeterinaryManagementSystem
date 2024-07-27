@@ -22,11 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/v1/appointments")
@@ -46,36 +44,39 @@ public class AppointmentController {
         this.customerService = customerService;
         this.animalService = animalService;
         this.modelMapper = modelMapper;
-        this.appointmentService=appointmentService;
+        this.appointmentService = appointmentService;
     }
 
+    // Yeni bir randevu kaydetme isteği alır
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<AppointmentResponse> save (@Valid @RequestBody AppointmentSaveRequest appointmentSaveRequest){
-        Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest,Appointment.class);
-
+    public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest appointmentSaveRequest) {
+        // Randevu verilerini DTO'dan Entity'ye dönüştürür
+        Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest, Appointment.class);
+        // İlgili doktor ve hayvan bilgilerini alır
         Doctor doctor = this.doctorService.get(appointmentSaveRequest.getDoctorId());
         saveAppointment.setDoctor(doctor);
-
-
         Animal animal = this.animalService.get(appointmentSaveRequest.getAnimalId());
         saveAppointment.setAnimal(animal);
 
+        // Randevuyu kaydeder
         Appointment savedAppointment = this.appointmentService.save(saveAppointment,
                 appointmentSaveRequest.getAnimalId(),
                 appointmentSaveRequest.getDoctorId());
 
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveAppointment,AppointmentResponse.class));
+        return ResultHelper.created(this.modelMapper.forResponse().map(saveAppointment, AppointmentResponse.class));
     }
 
+    // Belirli bir randevunun bilgilerini alır
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AppointmentResponse> get(@PathVariable("id")int id){
+    public ResultData<AppointmentResponse> get(@PathVariable("id") int id) {
         Appointment appointment = this.appointmentService.get(id);
-        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(appointment,AppointmentResponse.class);
+        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(appointment, AppointmentResponse.class);
         return ResultHelper.success(appointmentResponse);
     }
 
+    // Randevuların sayfalı listesini alır
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<AppointmentResponse>> cursor(
@@ -89,62 +90,53 @@ public class AppointmentController {
         return ResultHelper.cursor(appointmentResponsePage);
     }
 
+    // Belirli bir randevuyu günceller
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest appointmentUpdateRequest){
+    public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest appointmentUpdateRequest) {
         this.appointmentService.get(appointmentUpdateRequest.getId());
-        Appointment updateAppointment=this.modelMapper.forRequest().map(appointmentUpdateRequest,Appointment.class);
+        Appointment updateAppointment = this.modelMapper.forRequest().map(appointmentUpdateRequest, Appointment.class);
         this.appointmentService.update(updateAppointment);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateAppointment,AppointmentResponse.class));
+        return ResultHelper.success(this.modelMapper.forResponse().map(updateAppointment, AppointmentResponse.class));
     }
 
+    // Belirli bir randevuyu siler
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Result delete(@PathVariable("id")int id){
+    public Result delete(@PathVariable("id") int id) {
         this.appointmentService.delete(id);
         return ResultHelper.ok();
     }
 
+    // Belirli bir tarihteki randevunun hayvan bilgilerini alır
     @GetMapping("/{appointmentDate}/animal")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AnimalResponse> getAnimal(@PathVariable("appointmentDate")LocalDateTime appointmentDate){
+    public ResultData<AnimalResponse> getAnimal(@PathVariable("appointmentDate") LocalDateTime appointmentDate) {
         Optional<Appointment> appointmentOptional = appointmentService.get(appointmentDate);
-        Appointment appointment=appointmentOptional.get();
-        return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getAnimal(),AnimalResponse.class));
+        Appointment appointment = appointmentOptional.get();
+        return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getAnimal(), AnimalResponse.class));
     }
+
+    // Belirli bir tarihteki randevunun doktor bilgilerini alır
     @GetMapping("/{appointmentDate}/doctor")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<DoctorResponse> getDoctor(@PathVariable("appointmentDate")LocalDateTime appointmentDate){
+    public ResultData<DoctorResponse> getDoctor(@PathVariable("appointmentDate") LocalDateTime appointmentDate) {
         Optional<Appointment> appointmentOptional = appointmentService.get(appointmentDate);
-        Appointment appointment=appointmentOptional.get();
-        return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getDoctor(),DoctorResponse.class));
+        Appointment appointment = appointmentOptional.get();
+        return ResultHelper.success(this.modelMapper.forResponse().map(appointment.getDoctor(), DoctorResponse.class));
     }
 
- /*   @GetMapping("/animals")
-    @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<Animal>> getAnimal(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        List<Appointment> appointments = appointmentService.getAppointmentsWithinDateRange(startDate, endDate);
-
-        List<Animal> animals = appointments.stream()
-                .map(Appointment::getAnimal)
-                .distinct()  // Doktorları benzersiz hale getirmek için
-                .collect(Collectors.toList());
-
-        return ResultHelper.success(animals);
-    }*/
+    // Belirli bir tarih aralığındaki randevularda yer alan hayvanları alır
     @GetMapping("/animals")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AnimalResponse>> getAnimals(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate){
-        List<AnimalResponse> animalResponses = animalService.getAnimalsWithinDateRange(startDate,endDate);
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        List<AnimalResponse> animalResponses = animalService.getAnimalsWithinDateRange(startDate, endDate);
         return ResultHelper.success(animalResponses);
     }
 
-
-
+    // Belirli bir tarih aralığındaki randevularda yer alan doktorları alır
     @GetMapping("/doctors")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<DoctorResponse>> getDoctors(
@@ -153,7 +145,6 @@ public class AppointmentController {
         List<DoctorResponse> doctorResponses = doctorService.getDoctorsWithinDateRange(startDate, endDate);
         return ResultHelper.success(doctorResponses);
     }
-
 
 
 }

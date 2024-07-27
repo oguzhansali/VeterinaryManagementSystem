@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class DoctorUpdateRequest {
+public class DoctorUpdateRequest {//Doctor güncellemek için gerekli verileri tutar
     @Positive(message = "ID değeri pozitif bir sayı olmalıdır")
     private int id;
     @NotNull(message = "Doctor Adı boş olamaz")

@@ -8,10 +8,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerSaveRequest {
+public class CustomerSaveRequest {//Customer kayıt etmek için gerekli verileri tutar
     @NotNull(message = "Müşteri Adı boş olamaz")
     private String name;
-
     @NotNull(message = "Müşteri iletişim bilgisi boş olamaz")
     private String phone;
     @NotNull(message = "Müşteri e-posta adresi boş olamaz")
