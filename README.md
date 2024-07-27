@@ -9,6 +9,8 @@
 -Spring Framework kullanıldı.
 -Lombok, ModelMapper,PostgreSQL JDBC Driver,Spring Web,Spring Data JPA,Spring Boot Dev Tools, Validation kütüphaneleri kulanıldı.
 - Postman kullanıldı.
-- Veteriner klinik yönetim sistemine ait UML diagramları:
-https://lucid.app/lucidchart/1a57e75e-55bf-4bd5-998e-74e93e686a88/edit?viewport_loc=-213%2C-98%2C3700%2C1719%2CHWEp-vi-RSFO&invitationId=inv_91a626fe-5e33-4f1c-b0cf-ffcbb1cf1200
+- Veteriner klinik yönetim sistemine ait UML diagramları:![VetClinicManSystemUMLdiagram](https://github.com/user-attachments/assets/d51b910a-152f-4d2b-b27f-e9fe3bdceab0)
+
+  
+
 
