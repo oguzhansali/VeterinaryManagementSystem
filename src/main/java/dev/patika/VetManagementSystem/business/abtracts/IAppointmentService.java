@@ -1,5 +1,7 @@
 package dev.patika.VetManagementSystem.business.abtracts;
 
+import dev.patika.VetManagementSystem.dto.response.appointment.AppointmentResponse;
+import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Appointment;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,8 @@ public interface IAppointmentService {
     boolean delete(int id);
     Optional<Appointment> get(LocalDateTime appointment);
     List<Appointment> getAppointmentsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate);
+    List<AppointmentResponse> findAppointmentsByDoctorIdAndDateRange(int doctorId, LocalDateTime startDate, LocalDateTime endDate);
+
 
 
 }

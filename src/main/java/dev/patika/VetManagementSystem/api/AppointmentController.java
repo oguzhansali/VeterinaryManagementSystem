@@ -147,4 +147,16 @@ public class AppointmentController {
     }
 
 
+    @GetMapping("/doctors/{doctorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AppointmentResponse>> getAppointmentsByDoctorIdAndDateRange(
+            @PathVariable("doctorId") int doctorId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
+    ){
+        List<AppointmentResponse> appointmentResponses = appointmentService.findAppointmentsByDoctorIdAndDateRange(doctorId, startDate, endDate);
+        return ResultHelper.success(appointmentResponses);
+    }
+
+
 }

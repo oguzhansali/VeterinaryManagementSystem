@@ -1,6 +1,7 @@
 package dev.patika.VetManagementSystem.business.concretes;
 
 import dev.patika.VetManagementSystem.business.abtracts.IAppointmentService;
+import dev.patika.VetManagementSystem.core.config.modelMapper.IModelMapperService;
 import dev.patika.VetManagementSystem.core.exception.AppointmentAlreadyExistsException;
 import dev.patika.VetManagementSystem.core.exception.DoctorDoesNotAvailableException;
 import dev.patika.VetManagementSystem.core.exception.NotFoundException;
@@ -9,6 +10,8 @@ import dev.patika.VetManagementSystem.dao.AnimalRepo;
 import dev.patika.VetManagementSystem.dao.AppointmetRepo;
 import dev.patika.VetManagementSystem.dao.CustomerRepo;
 import dev.patika.VetManagementSystem.dao.DoctorRepo;
+import dev.patika.VetManagementSystem.dto.response.appointment.AppointmentResponse;
+import dev.patika.VetManagementSystem.dto.response.doctor.DoctorResponse;
 import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Appointment;
 import dev.patika.VetManagementSystem.entity.Doctor;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentManager implements IAppointmentService {
@@ -28,15 +32,18 @@ public class AppointmentManager implements IAppointmentService {
     private final CustomerRepo customerRepo;
     private final AnimalRepo animalRepo;
     private final DoctorRepo doctorRepo;
+    private final IModelMapperService modelMapper;
 
     public AppointmentManager(AppointmetRepo appointmetRepo,
                               CustomerRepo customerRepo,
                               AnimalRepo animalRepo,
-                              DoctorRepo doctorRepo) {
+                              DoctorRepo doctorRepo,
+                              IModelMapperService modelMapper) {
         this.appointmetRepo = appointmetRepo;
         this.customerRepo = customerRepo;
         this.animalRepo = animalRepo;
         this.doctorRepo = doctorRepo;
+        this.modelMapper = modelMapper;
     }
 
     //Randevu kaydeder
@@ -104,5 +111,11 @@ public class AppointmentManager implements IAppointmentService {
     @Override
     public List<Appointment> getAppointmentsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         return appointmetRepo.findByAppointmentDateBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<AppointmentResponse> findAppointmentsByDoctorIdAndDateRange(int doctorId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Appointment> appointments = appointmetRepo.findAppointmentsByDoctorIdAndDateRange(doctorId, startDate, endDate);
+        return appointments.stream().map(appointment -> modelMapper.forResponse().map(appointment, AppointmentResponse.class)).collect(Collectors.toList());
     }
 }
