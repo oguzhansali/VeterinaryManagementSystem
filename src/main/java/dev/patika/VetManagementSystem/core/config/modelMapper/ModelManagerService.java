@@ -29,4 +29,9 @@ public class ModelManagerService implements IModelMapperService{
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true).setMatchingStrategy(MatchingStrategies.LOOSE);
         return this.modelMapper;
     }
+
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
 }

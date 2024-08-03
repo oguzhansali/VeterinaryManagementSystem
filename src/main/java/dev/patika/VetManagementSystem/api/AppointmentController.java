@@ -96,8 +96,15 @@ public class AppointmentController {
     public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest appointmentUpdateRequest) {
         this.appointmentService.get(appointmentUpdateRequest.getId());
         Appointment updateAppointment = this.modelMapper.forRequest().map(appointmentUpdateRequest, Appointment.class);
+
+        Animal animal = this.animalService.get(appointmentUpdateRequest.getAnimalId());
+        updateAppointment.setAnimal(animal);
+
         this.appointmentService.update(updateAppointment);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateAppointment, AppointmentResponse.class));
+
+        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(updateAppointment,AppointmentResponse.class);
+        appointmentResponse.setAnimalId(animal.getAid());
+        return ResultHelper.success(appointmentResponse);
     }
 
     // Belirli bir randevuyu siler
@@ -157,6 +164,18 @@ public class AppointmentController {
         List<AppointmentResponse> appointmentResponses = appointmentService.findAppointmentsByDoctorIdAndDateRange(doctorId, startDate, endDate);
         return ResultHelper.success(appointmentResponses);
     }
+    @GetMapping("/animals/{animalId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AppointmentResponse>> getAppointmentsByAnimalIdAndDateRange(
+            @PathVariable("animalId") int animalId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
+    ){
+        List<AppointmentResponse> appointmentResponses = appointmentService.findAppointmentsByAnimalIdAndDateRange(animalId, startDate, endDate);
+        return ResultHelper.success(appointmentResponses);
+    }
+
+
 
 
 }

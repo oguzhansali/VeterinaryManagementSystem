@@ -1,5 +1,6 @@
 package dev.patika.VetManagementSystem.api;
 
+import dev.patika.VetManagementSystem.business.abtracts.IAnimalService;
 import dev.patika.VetManagementSystem.business.abtracts.IVaccineService;
 import dev.patika.VetManagementSystem.core.config.modelMapper.IModelMapperService;
 import dev.patika.VetManagementSystem.core.result.Result;
@@ -8,12 +9,19 @@ import dev.patika.VetManagementSystem.core.utilies.ResultHelper;
 import dev.patika.VetManagementSystem.dto.request.vaccine.VaccineSaveRequest;
 import dev.patika.VetManagementSystem.dto.request.vaccine.VaccineUpdateRequest;
 import dev.patika.VetManagementSystem.dto.response.CursorResponse;
+import dev.patika.VetManagementSystem.dto.response.appointment.AppointmentResponse;
 import dev.patika.VetManagementSystem.dto.response.vaccine.VaccineResponse;
+import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Vaccine;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -21,10 +29,12 @@ import org.springframework.web.bind.annotation.*;
 public class VaccineController {
     private final IVaccineService vaccineService;
     private final IModelMapperService modelMapper;
+    private final IAnimalService animalService;
 
-    public VaccineController(IVaccineService vaccineService, IModelMapperService modelMapper) {
+    public VaccineController(IVaccineService vaccineService, IModelMapperService modelMapper,IAnimalService animalService) {
         this.vaccineService = vaccineService;
         this.modelMapper = modelMapper;
+        this.animalService=animalService;
     }
 
     // Yeni bir aşı kaydeder
@@ -33,9 +43,16 @@ public class VaccineController {
     public ResultData<VaccineResponse> save(@Valid @RequestBody VaccineSaveRequest vaccineSaveRequest){
         // Aşı verilerini DTO'dan Entity'ye dönüştürür
         Vaccine saveVaccine = this.modelMapper.forRequest().map(vaccineSaveRequest,Vaccine.class);
+        saveVaccine.setId(0);
+        Animal animal = this.animalService.get(vaccineSaveRequest.getAnimalId());
+        saveVaccine.setAnimal(animal);
         // Aşıyı kaydeder
         this.vaccineService.save(saveVaccine);
-        return ResultHelper.created(this.modelMapper.forResponse().map(saveVaccine,VaccineResponse.class));
+
+        VaccineResponse vaccineResponse = this.modelMapper.forResponse().map(saveVaccine,VaccineResponse.class);
+        vaccineResponse.setAnimalId(animal.getAid());
+
+        return ResultHelper.created(vaccineResponse);
     }
     // Belirli bir aşının bilgilerini alır
     @GetMapping("/{id}")
@@ -67,8 +84,15 @@ public class VaccineController {
     public ResultData<VaccineResponse> update(@Valid @RequestBody VaccineUpdateRequest vaccineUpdateRequest){
         this.vaccineService.get(vaccineUpdateRequest.getId());
         Vaccine updateVaccine = this.modelMapper.forRequest().map(vaccineUpdateRequest,Vaccine.class);
+
+        Animal animal = this.animalService.get(vaccineUpdateRequest.getAnimalId());
+        updateVaccine.setAnimal(animal);
+
         this.vaccineService.update(updateVaccine);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateVaccine,VaccineResponse.class));
+
+        VaccineResponse vaccineResponse = this.modelMapper.forResponse().map(updateVaccine,VaccineResponse.class);
+        vaccineResponse.setAnimalId(animal.getAid());
+        return ResultHelper.success(vaccineResponse);
     }
 
     // Belirli bir aşının bilgisini siler
@@ -78,6 +102,29 @@ public class VaccineController {
         this.vaccineService.delete(id);
         return ResultHelper.ok();
     }
+
+   /* @GetMapping("/{protectionFnshDate}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<VaccineResponse>> getVaccinesByProtectionFnshDateAndDateRange(
+            @PathVariable("protectionEndDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate protectionFnshDate,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ){
+        List<VaccineResponse> vaccineResponses = vaccineService.findVaccinesByProtectionFnshDateAndDateRange(protectionFnshDate, startDate, endDate);
+        return ResultHelper.success(vaccineResponses);
+    }
+*/
+   /*@GetMapping
+   @ResponseStatus(HttpStatus.OK)
+   public ResultData<List<VaccineResponse>> getVaccinesByProtectionFnshDateAndDateRange(
+           @RequestParam("protectionFnshDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate protectionFnshDate,
+           @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+           @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+   ){
+       List<VaccineResponse> vaccineResponses = vaccineService.findVaccinesByProtectionFnshDateAndDateRange(protectionFnshDate, startDate, endDate);
+       return ResultHelper.success(vaccineResponses);
+   }*/
+
 
 
 

@@ -17,7 +17,7 @@ public class Animal {//Animalları temsil eder ve diğer classlar ile ilişkiler
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "animal_id")
-    private int id;
+    private int aid;
     @Column(name = "animal_name")
     private String name;
     @Column(name = "animal_species")
@@ -40,13 +40,12 @@ public class Animal {//Animalları temsil eder ve diğer classlar ile ilişkiler
     @OneToMany(mappedBy = "animal")
     private List<Appointment> appointments;
 
-
-    public int getId() {
-        return id;
+    public int getAid() {
+        return aid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAid(int aid) {
+        this.aid = aid;
     }
 
     public String getName() {

@@ -82,7 +82,7 @@ public class CustomerManager implements ICustomerService {
 
         // Her Animal için ilişkili Vaccine'leri sil
         for (Animal animal : animals) {
-            List<Vaccine> vaccines = vaccineRepo.findByAnimalId(animal.getId());
+            List<Vaccine> vaccines = vaccineRepo.findByAnimalAid(animal.getAid());
             if (vaccines != null && !vaccines.isEmpty()) {
                 vaccineRepo.deleteAll(vaccines);
             }

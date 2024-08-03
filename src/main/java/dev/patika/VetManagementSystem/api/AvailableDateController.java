@@ -38,6 +38,7 @@ public class AvailableDateController {
     public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest) {
         // Müsait tarih verilerini DTO'dan Entity'ye dönüştürür
         AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(availableDateSaveRequest, AvailableDate.class);
+        saveAvailableDate.setId(0);
 
         // İlgili doktor bilgilerini alır
         Doctor doctor = this.doctorService.get(availableDateSaveRequest.getDoctorId());

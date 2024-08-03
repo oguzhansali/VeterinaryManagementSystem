@@ -16,12 +16,23 @@ public interface AppointmetRepo extends JpaRepository<Appointment,Integer> {
     List<Appointment> findByAppointmentDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     void deleteByDoctorId(int doctorId);
-    void deleteByCustomerId(int doctorId);
-    void deleteByAnimalId(int doctorId);
+    void deleteByCustomerId(int customerId);
+    void deleteByAnimalAid(int animalId);
     @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId AND a.appointmentDate BETWEEN :startDate AND :endDate")
     List<Appointment> findAppointmentsByDoctorIdAndDateRange(@Param("doctorId") int doctorId,
                                                              @Param("startDate") LocalDateTime startDate,
                                                              @Param("endDate") LocalDateTime endDate);
+
+    /*@Query("SELECT a FROM Appointment a WHERE a.animal.id = :animalId AND a.appointmentDate BETWEEN :startDate AND :endDate")
+    List<Appointment> findAppointmentsByAnimalIdAndDateRange(@Param("animalId") int animalId,
+                                                             @Param("startDate") LocalDateTime startDate,
+                                                             @Param("endDate") LocalDateTime endDate);
+    */
+    @Query("SELECT a FROM Appointment a WHERE a.animal.id = :animalId AND a.appointmentDate BETWEEN :startDate AND :endDate")
+    List<Appointment> findAppointmentsByAnimalIdAndDateRange(@Param("animalId") int animalId,
+                                                             @Param("startDate") LocalDateTime startDate,
+                                                             @Param("endDate") LocalDateTime endDate);
+
 }
 
 

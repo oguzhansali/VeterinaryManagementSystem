@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnimalResponse {//Animal bilgilerini kullanıcıya sunar
-    private int id;
+    private int aid;
     private String name;
     private  String species;
     private String breed;
@@ -17,12 +17,12 @@ public class AnimalResponse {//Animal bilgilerini kullanıcıya sunar
     private String colour;
     private int customerId;
 
-    public int getId() {
-        return id;
+    public int getAid() {
+        return aid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAid(int aid) {
+        this.aid = aid;
     }
 
     public String getName() {

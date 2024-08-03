@@ -42,7 +42,8 @@ public class AnimalController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest animalSaveRequest) {
-        Animal saveAnimal = this.modelMapper.forRequest().map(animalSaveRequest, Animal.class);
+        Animal saveAnimal = this.modelMapper.forRequest().map(animalSaveRequest,Animal.class);
+        //Animal saveAnimal = this.modelMapper.getModelMapper().map(animalSaveRequest,Animal.class);
         // İlgili müşteri bilgilerini alır
         Customer customer = this.customerService.get(animalSaveRequest.getCustomerId());
         saveAnimal.setCustomer(customer);
@@ -78,10 +79,18 @@ public class AnimalController {
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest) {
-        this.animalService.get(animalUpdateRequest.getId());
+        this.animalService.get(animalUpdateRequest.getAnimal_id());
         Animal updateAnimal = this.modelMapper.forRequest().map(animalUpdateRequest, Animal.class);
+
+        Customer customer =this.customerService.get(animalUpdateRequest.getCustomerId());
+        updateAnimal.setCustomer(customer);
+
         this.animalService.update(updateAnimal);
-        return ResultHelper.success(this.modelMapper.forResponse().map(updateAnimal, AnimalResponse.class));
+
+        AnimalResponse animalResponse  =this.modelMapper.forResponse().map(updateAnimal,AnimalResponse.class);
+        animalResponse.setCustomerId(customer.getId());
+
+        return ResultHelper.success(animalResponse);
     }
 
     // Belirli bir hayvanı siler

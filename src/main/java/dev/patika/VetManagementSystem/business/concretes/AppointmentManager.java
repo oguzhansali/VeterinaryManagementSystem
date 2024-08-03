@@ -112,10 +112,18 @@ public class AppointmentManager implements IAppointmentService {
     public List<Appointment> getAppointmentsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         return appointmetRepo.findByAppointmentDateBetween(startDate, endDate);
     }
-
+    //Girilen tarihler aralığında doctorId ye ait Appointmentlerı getirir.
     @Override
     public List<AppointmentResponse> findAppointmentsByDoctorIdAndDateRange(int doctorId, LocalDateTime startDate, LocalDateTime endDate) {
         List<Appointment> appointments = appointmetRepo.findAppointmentsByDoctorIdAndDateRange(doctorId, startDate, endDate);
         return appointments.stream().map(appointment -> modelMapper.forResponse().map(appointment, AppointmentResponse.class)).collect(Collectors.toList());
+    }
+
+    //Girilen tarihler aralığında animalId ye ait Appointmentlerı getirir.
+    public List<AppointmentResponse> findAppointmentsByAnimalIdAndDateRange(int animalId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Appointment> appointments = appointmetRepo.findAppointmentsByAnimalIdAndDateRange(animalId, startDate, endDate);
+        return appointments.stream()
+                .map(appointment -> modelMapper.forResponse().map(appointment, AppointmentResponse.class))
+                .collect(Collectors.toList());
     }
 }

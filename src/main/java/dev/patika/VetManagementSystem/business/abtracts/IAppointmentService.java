@@ -19,6 +19,9 @@ public interface IAppointmentService {
     Optional<Appointment> get(LocalDateTime appointment);
     List<Appointment> getAppointmentsWithinDateRange(LocalDateTime startDate, LocalDateTime endDate);
     List<AppointmentResponse> findAppointmentsByDoctorIdAndDateRange(int doctorId, LocalDateTime startDate, LocalDateTime endDate);
+    List<AppointmentResponse> findAppointmentsByAnimalIdAndDateRange(int animalId, LocalDateTime startDate, LocalDateTime endDate);
+
+
 
 
 

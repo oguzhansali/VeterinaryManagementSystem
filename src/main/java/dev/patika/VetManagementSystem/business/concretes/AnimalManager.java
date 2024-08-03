@@ -68,7 +68,7 @@ public class AnimalManager implements IAnimalService {
     // Belirli bir hayvanın bilgisini günceller
     @Override
     public Animal update(Animal animal) {
-        this.get(animal.getId());
+        this.get(animal.getAid());
         return this.animalRepo.save(animal);
     }
 
@@ -79,8 +79,8 @@ public class AnimalManager implements IAnimalService {
         Animal animal = animalRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
         // Hayvana ait randevuları ve aşıları siler
-        appointmetRepo.deleteByAnimalId(id);
-        vaccineRepo.deleteByAnimalId(id);
+        appointmetRepo.deleteByAnimalAid(id);
+        vaccineRepo.deleteByAnimalAid(id);
         // Hayvanı siler
         animalRepo.delete(animal);
         return true;
