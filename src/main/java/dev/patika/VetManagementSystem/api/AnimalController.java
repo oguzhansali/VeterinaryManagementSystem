@@ -16,6 +16,7 @@ import dev.patika.VetManagementSystem.entity.Animal;
 import dev.patika.VetManagementSystem.entity.Customer;
 import dev.patika.VetManagementSystem.entity.Vaccine;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,17 @@ public class AnimalController {
     private final ICustomerService customerService;
     private final IAnimalService animalService;
     private final IModelMapperService modelMapper;
+    private final ModelMapper modelMap;
+
 
     public AnimalController(ICustomerService customerService,
                             IAnimalService animalService,
-                            IModelMapperService modelMapper) {
+                            IModelMapperService modelMapper,
+                            ModelMapper modelMap) {
         this.customerService = customerService;
         this.animalService = animalService;
         this.modelMapper = modelMapper;
+        this.modelMap=modelMap;
     }
 
     //Yeni bir hayvan kaydetme isteği alır
@@ -43,7 +48,6 @@ public class AnimalController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest animalSaveRequest) {
         Animal saveAnimal = this.modelMapper.forRequest().map(animalSaveRequest,Animal.class);
-        //Animal saveAnimal = this.modelMapper.getModelMapper().map(animalSaveRequest,Animal.class);
         // İlgili müşteri bilgilerini alır
         Customer customer = this.customerService.get(animalSaveRequest.getCustomerId());
         saveAnimal.setCustomer(customer);
@@ -79,17 +83,13 @@ public class AnimalController {
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest) {
-        this.animalService.get(animalUpdateRequest.getAnimal_id());
+        this.animalService.get(animalUpdateRequest.getAid());
         Animal updateAnimal = this.modelMapper.forRequest().map(animalUpdateRequest, Animal.class);
-
         Customer customer =this.customerService.get(animalUpdateRequest.getCustomerId());
         updateAnimal.setCustomer(customer);
-
         this.animalService.update(updateAnimal);
-
         AnimalResponse animalResponse  =this.modelMapper.forResponse().map(updateAnimal,AnimalResponse.class);
         animalResponse.setCustomerId(customer.getId());
-
         return ResultHelper.success(animalResponse);
     }
 

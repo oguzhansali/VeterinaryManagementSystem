@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnimalUpdateRequest {//Hayvan güncellemek için gerekli verileri tutar
-    private int animal_id;
+    private int aid;
     private String name;
     private String species;
     private String breed;
@@ -19,12 +19,12 @@ public class AnimalUpdateRequest {//Hayvan güncellemek için gerekli verileri t
     private LocalDate dateofBirth;
     private int customerId;
 
-    public int getAnimal_id() {
-        return animal_id;
+    public int getAid() {
+        return aid;
     }
 
-    public void setAnimal_id(int animal_id) {
-        this.animal_id = animal_id;
+    public void setAid(int aid) {
+        this.aid = aid;
     }
 
     public String getName() {
