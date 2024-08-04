@@ -76,10 +76,18 @@ public class VaccineManager implements IVaccineService {
         return vaccineRepo.findByProtectionFnshDateBetween(startDate,endDate);
     }
 
-   /* @Override
-    public List<VaccineResponse> findVaccinesByProtectionFnshDateAndDateRange(LocalDate protectionFnshDate, LocalDate startDate, LocalDate endDate) {
-        List<Vaccine> vaccines = vaccineRepo.findVaccinesByProtectionFnshDateAndDateRange(protectionFnshDate, startDate, endDate);
 
-        return vaccines.stream().map(vaccine -> modelMapper.forResponse().map(vaccine,VaccineResponse.class)).collect(Collectors.toList());
-    }*/
+    @Override
+    public List<VaccineResponse> findVaccinesByProtectionFnshDateAndDateRange(LocalDate protectionFnshDate, LocalDate startDate, LocalDate endDate) {
+        List<Vaccine> vaccines = vaccineRepo.findVaccinesByProtectionFnshDateAndDateRange(startDate, endDate);
+
+        // Filtreleme işlemi, service katmanında yapılabilir.
+        List<Vaccine> filteredVaccines = vaccines.stream()
+                .filter(vaccine -> vaccine.getProtectionFnshDate().equals(protectionFnshDate))
+                .collect(Collectors.toList());
+
+        return filteredVaccines.stream()
+                .map(vaccine -> modelMapper.forResponse().map(vaccine, VaccineResponse.class))
+                .collect(Collectors.toList());
+    }
 }

@@ -16,10 +16,11 @@ public interface VaccineRepo extends JpaRepository<Vaccine,Integer> {
     List<Vaccine> findByAnimalAid(Integer animalId);
     List<Vaccine> findByProtectionFnshDateBetween(LocalDate startDate, LocalDate endDate);
 
-    /*@Query("SELECT v FROM Vaccine v JOIN FETCH v.animal WHERE v.protecFnshDate = :protectionFnshDate AND v.protecFnshDate BETWEEN :startDate AND :endDate")
-    List<Vaccine> findVaccinesByProtectionFnshDateAndDateRange(@Param("protectionFnshDate") LocalDate protectionFnshDate,
-                                                              @Param("startDate") LocalDate startDate,
-                                                              @Param("endDate") LocalDate endDate);
-*/
+
+    @Query("SELECT v FROM Vaccine v WHERE v.protectionFnshDate BETWEEN :startDate AND :endDate")
+    List<Vaccine> findVaccinesByProtectionFnshDateAndDateRange(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+
 
 }

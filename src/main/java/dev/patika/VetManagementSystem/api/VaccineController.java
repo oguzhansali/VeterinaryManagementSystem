@@ -103,27 +103,17 @@ public class VaccineController {
         return ResultHelper.ok();
     }
 
-   /* @GetMapping("/{protectionFnshDate}")
+    //Girilen tarih aralığında  protectionFnshDate'i olan vaccineleri getirir.
+    @GetMapping("/byProtectionFnshDate/{protectionFnshDate}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<VaccineResponse>> getVaccinesByProtectionFnshDateAndDateRange(
-            @PathVariable("protectionEndDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate protectionFnshDate,
+    public ResultData<List<VaccineResponse>> findVaccinesByProtectionFnshDateAndDateRange(
+            @PathVariable("protectionFnshDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate protectionFnshDate,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-    ){
+    ) {
         List<VaccineResponse> vaccineResponses = vaccineService.findVaccinesByProtectionFnshDateAndDateRange(protectionFnshDate, startDate, endDate);
         return ResultHelper.success(vaccineResponses);
     }
-*/
-   /*@GetMapping
-   @ResponseStatus(HttpStatus.OK)
-   public ResultData<List<VaccineResponse>> getVaccinesByProtectionFnshDateAndDateRange(
-           @RequestParam("protectionFnshDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate protectionFnshDate,
-           @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-           @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-   ){
-       List<VaccineResponse> vaccineResponses = vaccineService.findVaccinesByProtectionFnshDateAndDateRange(protectionFnshDate, startDate, endDate);
-       return ResultHelper.success(vaccineResponses);
-   }*/
 
 
 

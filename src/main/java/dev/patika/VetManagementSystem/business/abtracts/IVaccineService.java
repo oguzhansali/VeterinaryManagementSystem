@@ -18,7 +18,6 @@ public interface IVaccineService {
     Vaccine update(Vaccine vaccine);
     boolean delete(int id);
     List<Vaccine> findByProtectionFnshDateBetween(LocalDate startDate, LocalDate endDate);
-    //List<VaccineResponse> findVaccinesByProtectionFnshDateAndDateRange(LocalDate protectionFnshDate, LocalDate startDate, LocalDate endDate);
-
+    List<VaccineResponse> findVaccinesByProtectionFnshDateAndDateRange(LocalDate protectionFnshDate, LocalDate startDate, LocalDate endDate);
 
 }
